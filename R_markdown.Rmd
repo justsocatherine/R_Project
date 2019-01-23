@@ -86,8 +86,6 @@ ESSclean <- ESSclean %>% gather(Wave, Wavevalue, wave1:wave4, na.rm = TRUE, conv
 ESSclean$WAVES <- NULL
 ESSclean$Wave <- NULL
 
-#EXAMPLE: Merging Political Knowledge
-ESSclean <- ESSclean %>% gather(PolKnowl1, PolKnowl1value, QW1_18, W2_Q14, W3_Q19, W4_Q21, na.rm = TRUE, convert = FALSE, factor_key = FALSE)
 
 ESSclean <- ESSclean %>% gather(delete, PolKnowl1value, w1_q18, w2_q14, w3_q19, w4_q21, na.rm = TRUE, convert = FALSE, factor_key = FALSE)
 
