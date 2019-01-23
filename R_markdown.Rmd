@@ -89,6 +89,10 @@ ESSclean$PolKnowl3 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q20, ifelse(ES
 ESSclean$PolKnowl4 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q21, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q17, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q22, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q24, NA)))) #Create PolKnowl4
 ESSclean$PolKnowl5 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q22, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q18, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q23, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q25, NA)))) #Create PolKnowl5
 
+#PROOF THAT IT WORKS ( Example is a very indecisive respondent)
+ESSclean %>% select(RESPNR, Wavevalue, w1_q18, w2_q14, w3_q19, w4_q21) %>% filter(RESPNR == 30016148	)
+ESSclean %>% select(RESPNR, Wavevalue, PolKnowl1) %>% filter(RESPNR == 30016148	)
+
 # Below is work of Matteo (?)
 ESSclean <- ESSclean %>% 
   group_by(RESPNR, Wavevalue) %>%
