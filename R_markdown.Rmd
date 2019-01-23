@@ -51,6 +51,10 @@ plot(pressure)
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 ```{r Spread the waveeeeees}
+<<<<<<< HEAD
+
+=======
+>>>>>>> e0b9829098bb51094c2741bfac77126276fe9313
 #Wave 1
 ESS$wave1 <- ifelse(ESS$WAVES == "All waves", 1, ifelse(ESS$WAVES == "Only wave 1", 1, ifelse(ESS$WAVES == "Wave 1 and 2", 1, ifelse(ESS$WAVES == "Wave 1, 2 and 3", 1, 0))))
 
