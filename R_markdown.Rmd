@@ -29,23 +29,19 @@ ESS %>%
   summarise(n_RESPS = n_distinct(RESPNR)) #Check all respondent IDs unique. Respondent ID will be #used as our primary key in this table.
 # @ wave weighting should probabbly be in the wave'd variables seeing as they apply to each wave, fix this later @H
 
-#tidy columns respondent ID and Waves
-ESSclean <- ESS %>%
-  count(WAVES) #First count the number of respondents participating in each level of 'WAVES'.
-
 #Wave 1
-ESSclean$wave1 <- ifelse(ESSclean$WAVES == "All waves", 1, ifelse(ESSclean$WAVES == "Only wave 1", 1, ifelse(ESSclean$WAVES == "Wave 1 and 2", 1, ifelse(ESSclean$WAVES == "Wave 1, 2 and 3", 1, 0)))) 
-#Create new column called "wave1" in ESSclean, assign the value 1 = YES 0 = NO. (Note all participants were in at least wave1) 
+ESS$wave1 <- ifelse(ESS$WAVES == "All waves", 1, ifelse(ESS$WAVES == "Only wave 1", 1, ifelse(ESS$WAVES == "Wave 1 and 2", 1, ifelse(ESS$WAVES == "Wave 1, 2 and 3", 1, 0)))) 
+#Create new column called "wave1" in ESS, assign the value 1 = YES 0 = NO. (Note all participants were in at least wave1) 
 
 #Wave 2
-ESSclean$wave2 <- ifelse(ESS$WAVES == "All waves", 1, ifelse(ESSclean$WAVES == "Wave 1 and 2", 2, ifelse(ESSclean$WAVES == "Wave 1, 2 and 3", 1, 0))) #Create new column called "wave2" in ESSclean, assign the value 1 = YES if respondent participated in wave 2, 0 = NO. 
+ESS$wave2 <- ifelse(ESS$WAVES == "All waves", 1, ifelse(ESS$WAVES == "Wave 1 and 2", 2, ifelse(ESS$WAVES == "Wave 1, 2 and 3", 1, 0))) #Create new column called "wave2" in ESS, assign the value 1 = YES if respondent participated in wave 2, 0 = NO. 
 
 #Wave 3
-ESSclean$wave3 <- ifelse(ESSclean$WAVES == "All waves", 1, ifelse(ESSclean$WAVES == "Wave 1, 2 and 3", 1, 0)) 
-#Create new column called "wave3" in ESSclean, assign the value 1 = YES if respondent participated in wave 3, 0 = NO. 
+ESS$wave3 <- ifelse(ESS$WAVES == "All waves", 1, ifelse(ESS$WAVES == "Wave 1, 2 and 3", 1, 0)) 
+#Create new column called "wave3" in ESS, assign the value 1 = YES if respondent participated in wave 3, 0 = NO. 
 
 #Wave 4
-ESSclean$wave4 <- ifelse(ESSclean$WAVES == "All waves", 1, 0) #Create new column called "wave4" in ESSclean, assign the value 1 = YES if respondent participated in wave 4, 0 = NO.
+ESS$wave4 <- ifelse(ESS$WAVES == "All waves", 1, 0) #Create new column called "wave4" in ESS, assign the value 1 = YES if respondent participated in wave 4, 0 = NO.
 
 
 RESP_DEMOG <- ESS %>%
