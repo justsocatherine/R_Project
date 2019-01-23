@@ -30,7 +30,8 @@ ESS %>%
 # @ wave weighting should probabbly be in the wave'd variables seeing as they apply to each wave, fix this later @H
 
 #tidy columns respondent ID and Waves
-ESSclean %>% count(WAVES) #First count the number of respondents participating in each level of 'WAVES'.
+ESSclean <- ESS %>%
+  count(WAVES) #First count the number of respondents participating in each level of 'WAVES'.
 
 #Wave 1
 ESSclean$wave1 <- ifelse(ESSclean$WAVES == "All waves", 1, ifelse(ESSclean$WAVES == "Only wave 1", 1, ifelse(ESSclean$WAVES == "Wave 1 and 2", 1, ifelse(ESSclean$WAVES == "Wave 1, 2 and 3", 1, 0)))) 
