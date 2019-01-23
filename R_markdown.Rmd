@@ -73,6 +73,7 @@ ESSclean <- select(ESS, -c(INTNR, SAMPLE,	GEWICHTA1_w1,	GEWICHTA1_w2,	GEWICHTA1_
 ESSclean %>% count(WAVES) #First count the number of respondents participating in each level of 'WAVES'.
 
 #Wave 1
+<<<<<<< HEAD
 ESSclean$wave1 <- ifelse(ESSclean$WAVES == "All waves", 1, ifelse(ESSclean$WAVES == "Only wave 1", 1, ifelse(ESSclean$WAVES == "Wave 1 and 2", 1, ifelse(ESSclean$WAVES == "Wave 1, 2 and 3", 1, 0)))) 
 #Create new column called "wave1" in ESSclean, assign the value 1 = YES 0 = NO. (Note all participants were in at least wave1) 
 
@@ -88,6 +89,25 @@ ESSclean$wave4 <- ifelse(ESSclean$WAVES == "All waves", 4, 0) #Create new column
 
 ESSclean %>% 
   count(wave1, wave2, wave3, wave4)
+=======
+ESSclean$wave1 <- ifelse(ESSclean$WAVES == "All waves", 1, ifelse(ESSclean$WAVES == "Only wave 1", 1, ifelse(ESSclean$WAVES == "Wave 1 and 2", 1, ifelse(ESSclean$WAVES == "Wave 1, 2 and 3", 1, NA))))
+
+#Wave 2
+ESSclean$wave2 <- ifelse(ESS$WAVES == "All waves", 2, ifelse(ESSclean$WAVES == "Wave 1 and 2", 2, ifelse(ESSclean$WAVES == "Wave 1, 2 and 3", 2, NA)))
+
+#Wave 3
+ESSclean$wave3 <- ifelse(ESSclean$WAVES == "All waves", 3, ifelse(ESSclean$WAVES == "Wave 1, 2 and 3", 3, NA))
+
+#Wave 4
+ESSclean$wave4 <- ifelse(ESSclean$WAVES == "All waves", 4, NA)
+
+#create columns out of Wave 1, 2, 3, 4
+Essclean <- ESSclean %>% gather(Wave, Wavevalue, wave1:wave4, na.rm = TRUE, convert = FALSE, factor_key = FALSE)
+
+#remove WAVES and Wave columns
+ESSclean$WAVES <- NULL
+ESSclean$Wave <- NULL
+>>>>>>> 3a406088c54b2ffa45a5eca7a3629b51feeed05d
 
 
 ```
