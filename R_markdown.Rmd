@@ -82,12 +82,23 @@ ESSclean$wave4 <- ifelse(ESS$wave4 == 1, 4, NA)
 #Create one out of Wave 1, 2, 3, 4
 ESSclean <- ESSclean %>% gather(Wave, Wavevalue, wave1:wave4, na.rm = TRUE, convert = FALSE, factor_key = FALSE)
 
-#Remove columns WAVES and Wave columns
-ESSclean$WAVES <- NULL
-ESSclean$Wave <- NULL
 
 
-ESSclean <- ESSclean %>% gather(delete, PolKnowl1value, w1_q18, w2_q14, w3_q19, w4_q21, na.rm = TRUE, convert = FALSE, factor_key = FALSE)
+ESSclean <- ESSclean %>% 
+  group_by(RESPNR, Wavevalue) %>%
+  summarise()
+
+head(ESSclean)
+
+ESSclean <- ESSclean %>%
+  gather(key = "delete", value = "PK1", w1_q18, w2_q14, w3_q19, w4_q21, na.rm = FALSE,
+convert = FALSE, factor_key = FALSE)
+
+
+gather(delete, PolKnowl1value, w1_q18, w2_q14, w3_q19, w4_q21, na.rm = TRUE, convert = FALSE, factor_key = FALSE) %>% View()
+
+ESSclean %>% select(RESPNR, delete, PolKnowl1value)
+
 
 ```
 
