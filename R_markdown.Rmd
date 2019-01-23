@@ -35,15 +35,11 @@ RESP_DEMOG <- ESS %>%
 summarise()
 RESP_DEMOG #Now we have a table with all fixed characteristics of respondents. We still need to check every single variable that it meets rules of tidy data even thouh now at least 'each unit has its own table' is PARTLY fulfilled with this table @@
 
-
-rspndnr + wave£ polknow1 polknow2 polkno3 polkn4 ilikecats1
-rspnder + wave 1 sdfds '
+#@@ NOTE!!! SOME VARIABLES ABOVE HAVE BEEN RECODED already into standard variable names already such as w1_q61 is actualy OPLA (opleiding) 
 
 
-
-
-
-
+RESP_DEMOG %>% RESP_DEMOG
+mutate()
 
 
 
