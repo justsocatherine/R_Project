@@ -119,8 +119,7 @@ ALL_FIXED <- CA %>%
 #Creating Newspaper fixed characteristics table. Note: nu.nl is included as a newspaper, because it is treated as one in the codebook. Keeping V4 as article ID for primary key, also keeping V4 (outlet) as may be useful also. 
 CA_FIXED_NP <- CA %>%
   filter(V4 != "NOS Journaal" & V4 != "RTL Nieuws")%>% #Exclude (filter out) the two TV channels
-  group_by(V2,	V4, NP1,	NP2,	NP3,	NP4,	NP5,	NP6,	NP7) %>% 
-  summarise()
+  select(V2,	V4, NP1,	NP2,	NP3,	NP4,	NP5,	NP6,	NP7) 
 
 #Creating Table for the Muslim/Polish questions, which have very different structure to the rest of data
 #NL2_1_1: NL2_4_3 = the table questions on p. 11 of codebook concerning muslims, and NL4 starting items are
@@ -135,9 +134,9 @@ MUS_POL <- CA %>%
 
 
 CA_FIXED_TV <- CA %>%
-  filter(V4 != "de Telegraaf" & V4 != "de Volkskrant" & V4 != "NRC Handelsblad" & V4 != "nu.nl")%>% #Exclude (filter out) the newspapers
-  group_by(V2,	V4, TV1, TV2) %>% 
-  summarise()
+  filter(V4 == "NOS Journaal" | V4 == "RTL Nieuws")%>% #Exclude (filter out) the newspapers
+  select(V2,	V4, TV1, TV2)
+
 
 
 APRIL <- CA %>% #Table with variables coded only after april the 17th #needs id and date added, then selected by date
