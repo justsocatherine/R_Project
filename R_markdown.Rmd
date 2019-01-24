@@ -115,6 +115,13 @@ CA_FIXED_NP <- CA %>%
 
 head(CA_FIXED_NP)
 
+CA_FIXED_TV <- CA %>%
+  filter(V4 != "de Telegraaf" & V4 != "de Volkskrant" & V4 != "NRC Handelsblad" & V4 != "nu.nl")%>% #Exclude (filter out) the newspapers
+  group_by(V2,	V4, TV1, TV2) %>% 
+  summarise()
+
+head(CA_FIXED_TV)
+
 
 ```
 
