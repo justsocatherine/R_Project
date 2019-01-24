@@ -104,7 +104,13 @@ ESSclean %>% select(RESPNR, Wavevalue, PolKnowl1) %>% filter(RESPNR == 30016148	
 ```
 
 ```{r - CA tidying chunk}
+ALL_FIXED <- CA %>%
+  group_by()
 
+
+CA_FIXED_NP <- CA %>%
+  group_by(V2,	V4, NP1,	NP2,	NP3,	NP4,	NP5,	NP6,	NP7) %>% #Creating Newspaper fixed characteristics table
+  summarise()
 
 
 ```
