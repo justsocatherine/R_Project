@@ -105,12 +105,16 @@ ESSclean %>% select(RESPNR, Wavevalue, PolKnowl1) %>% filter(RESPNR == 30016148	
 
 ```{r - CA tidying chunk}
 ALL_FIXED <- CA %>%
-  group_by()
+  group_by(V1,	V2,	V3a,	V3b,	V3c,	V4,	V5, V6,	V6_cleaned,
+)
 
-
+#Creating Newspaper fixed characteristics table. Note: nu.nl is included as a newspaper, because it is treated as one in the codebook. 
 CA_FIXED_NP <- CA %>%
-  group_by(V2,	V4, NP1,	NP2,	NP3,	NP4,	NP5,	NP6,	NP7) %>% #Creating Newspaper fixed characteristics table
+  filter(V4 != "NOS Journaal" & V4 != "RTL Nieuws")%>%
+  group_by(V2,	V4, NP1,	NP2,	NP3,	NP4,	NP5,	NP6,	NP7) %>% 
   summarise()
+
+head(CA_FIXED_NP)
 
 
 ```
