@@ -104,16 +104,17 @@ ESSclean %>% select(RESPNR, Wavevalue, PolKnowl1) %>% filter(RESPNR == 30016148	
 ```
 
 ```{r - CA tidying chunk}
-ALL_FIXED <- CA %>%
-  select(V1,	V2,	V3a,	V3b,	V3c,	V4,	V5, V6,	V6_cleaned, NL1a : NL1f, ) %>% View()
+#Creating table for fixed characteristics relevant to all, i.e. items asked to everything. Checked using console. 
+ALL_FIXED <- CA %>% 
+  select(V1,	V2,	V3a,	V3b,	V3c,	V4,	V5, V6,	V6_cleaned, NL1a : NL1f, V7, V8a, V8b, V9,V11, V12, V13, V14, V15a_TEXT : V15f_TEXT, V15_a_cleaned : V15_f_cleaned,  V16a : V16f, NL7a : NL7e, NL24, NL25, NL26, NL27, NL28a, NL28b, NL29a : NL29g, NL30, NL31, NL32a : NL32g, NL33) %>% View()
 
-#Creating Newspaper fixed characteristics table. Note: nu.nl is included as a newspaper, because it is treated as one in the codebook. 
+#Creating Newspaper fixed characteristics table. Note: nu.nl is included as a newspaper, because it is treated as one in the codebook. Keeping V4 as article ID for primary key, also keeping V4 (outlet) as may be useful also. 
 CA_FIXED_NP <- CA %>%
   filter(V4 != "NOS Journaal" & V4 != "RTL Nieuws")%>% #Exclude (filter out) the two TV channels
   group_by(V2,	V4, NP1,	NP2,	NP3,	NP4,	NP5,	NP6,	NP7) %>% 
   summarise()
 
-head(CA_FIXED_NP)
+
 
 
 ```
