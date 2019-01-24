@@ -104,15 +104,15 @@ ESSclean %>% select(RESPNR, Wavevalue, PolKnowl1) %>% filter(RESPNR == 30016148	
 ```
 
 ```{r - CA tidying chunk}
-#Creating table for fixed characteristics relevant to all, i.e. items asked to everything. Checked using console. 
-ALL_FIXED <- CA %>% 
-  select(V1,	V2,	V3a,	V3b,	V3c,	V4,	V5, V6,	V6_cleaned, NL1a : NL1f, V7, V8a, V8b, V9,V11, V12, V13, V14, V15a_TEXT : V15f_TEXT, V15_a_cleaned : V15_f_cleaned,  V16a : V16f, NL7a : NL7e, NL24, NL25, NL26, NL27, NL28a, NL28b, NL29a : NL29g, NL30, NL31, NL32a : NL32g, NL33) %>% View()
+ALL_FIXED <- CA %>%
+  select(V1,	V2,	V3a,	V3b,	V3c,	V4,	V5, V6,	V6_cleaned, NL1a : NL1f, ) %>% View()
 
-#Creating Newspaper fixed characteristics table. Note: nu.nl is included as a newspaper, because it is treated as one in the codebook. Keeping V4 as article ID for primary key, also keeping V4 (outlet) as may be useful also. 
+#Creating Newspaper fixed characteristics table. Note: nu.nl is included as a newspaper, because it is treated as one in the codebook. 
 CA_FIXED_NP <- CA %>%
   filter(V4 != "NOS Journaal" & V4 != "RTL Nieuws")%>% #Exclude (filter out) the two TV channels
   group_by(V2,	V4, NP1,	NP2,	NP3,	NP4,	NP5,	NP6,	NP7) %>% 
   summarise()
+
 
 #Creating Table for the Muslim/Polish questions, which have very different structure to the rest of data
 #NL2_1_1: NL2_4_3 = the table questions on p. 11 of codebook concerning muslims, and NL4 starting items are
@@ -124,8 +124,19 @@ MUS_POL <- CA %>%
   select(V2, V6, NL2_1_1 : NL2_4_3, NL3, NL4_1_1 : NL4_4_3, NL5) %>%
   filter(V6 == "Economy: Free movement of people within the EU (common market: including the Schengen agreement)" | V6 == "Immigration : EU immigration policy - regulating immigration from outside the EU (e.g. refugees, asylum, EU border" | V6 == "Immigration : Migration / immigration policy – regulating migration within the EU (e.g. labour migration from East" | V6 == "Immigration : Immigration policy (non-EU) - regulating immigration from outside the EU" | V6 == "Immigration : Immigrant integration" | V6 =="Immigration : Multiculturalism (cultural diversity, cultural plurality)" | V6 == "Immigration : Anti-Islam" | V6 == "Immigration : Other immigration topics" | V6 == "Culture and Other: Religion" | V6 == "Citizens’ rights: Immigrant rights" | V6 == "Elections: Media coverage of the campaign")
 
+head(CA_FIXED_NP)
+
+CA_FIXED_TV <- CA %>%
+  filter(V4 != "de Telegraaf" & V4 != "de Volkskrant" & V4 != "NRC Handelsblad" & V4 != "nu.nl")%>% #Exclude (filter out) the newspapers
+  group_by(V2,	V4, TV1, TV2) %>% 
+  summarise()
+
+head(CA_FIXED_TV)
+
 head(MUS_POL)
 
+APRIL <- CA %>% #Table with variables coded only after april the 17th
+  select(V9,	V9b,	V10a : V10c,	NL6_1_1 : NL6_3_4,	NL8a,	NL9a_1 : NL9a_5_TEXT, NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,	NL10a : NL10d, NL11a1 : NL23d5_TEXT,	NL34 : NL41f, NL42a_a : NL42b_SP_f, NL43, NL44, NL45 : NL47) %>% View()  
 
 ```
 
