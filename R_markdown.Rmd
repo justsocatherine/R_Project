@@ -93,20 +93,6 @@ ESSclean$PolKnowl5 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q22, ifelse(ES
 ESSclean %>% select(RESPNR, Wavevalue, w1_q18, w2_q14, w3_q19, w4_q21) %>% filter(RESPNR == 30016148	)
 ESSclean %>% select(RESPNR, Wavevalue, PolKnowl1) %>% filter(RESPNR == 30016148	)
 
-# Below is work of Matteo (?)
-ESSclean <- ESSclean %>% 
-  group_by(RESPNR, Wavevalue) %>%
-  summarise()
-
-head(ESSclean)
-
-ESSclean <- ESSclean %>%
-  gather(key = "delete", value = "PK1", w1_q18, w2_q14, w3_q19, w4_q21, na.rm = FALSE,
-convert = FALSE, factor_key = FALSE)
-
-gather(delete, PolKnowl1value, w1_q18, w2_q14, w3_q19, w4_q21, na.rm = TRUE, convert = FALSE, factor_key = FALSE) %>% View()
-
-ESSclean %>% select(RESPNR, delete, PolKnowl1value)
 
 ```
 
