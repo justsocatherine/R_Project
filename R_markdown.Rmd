@@ -16,10 +16,10 @@ library(tidyverse) #access tidyverse
 library(lubridate) #lubridate (@@remove this if we don't actually use it in the end)
 #@@add other additional packages needed here - e.g. for interactive plots etc. 
 
-#CA <- read_csv("Dataset MCA EPE 2014 NL FINAL.csv") #Read content analysis file, store under CA
+CA <- read_csv("Dataset MCA EPE 2014 NL FINAL.csv") #Read content analysis file, store under CA
 # @ later remove this so also contetn analysis is imported here
 
-ESS <- read_csv("All waves GENERAL.csv") # read survey file, store under ESS (Election Study Survey)
+#ESS <- read_csv("All waves GENERAL.csv") # read survey file, store under ESS (Election Study Survey)
 
 #Tidying the data set. Step ONE: Seperate respondent fixed characteristics, with help of code book.
 #Examples of these: demographics, big 5 personality traits etc. Here the RESPONDENT is the unit. 
@@ -103,6 +103,12 @@ convert = FALSE, factor_key = FALSE)
 gather(delete, PolKnowl1value, w1_q18, w2_q14, w3_q19, w4_q21, na.rm = TRUE, convert = FALSE, factor_key = FALSE) %>% View()
 
 ESSclean %>% select(RESPNR, delete, PolKnowl1value)
+
+```
+
+```{r - CA tidying chunk}
+
+
 
 ```
 
