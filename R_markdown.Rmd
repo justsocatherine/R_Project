@@ -124,7 +124,7 @@ head(CA_FIXED_TV)
 
 
 APRIL <- CA %>% #Table with variables coded only after april the 17th
-  select(V9,	V9b,	V10a : V10c,	NL6_1_1 : NL6_3_4,	NL8a,	NL9a_1 : NL9a_5_TEXT, NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,	NL10a : NL10d, NL11a1 : NL23d5_TEXT,	NL34 : NL41f, NL42a_a : NL42b_SP_f, NL43, NL44, NL45 : NL47) %>% View() 
+  select(V9,	V9b,	V10a : V10c,	NL6_1_1 : NL6_3_4,	NL8a,	NL9a_1 : NL9a_5_TEXT, NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,	NL10a : NL10d, NL11a1 : NL23d5_TEXT,	NL34 : NL41f, NL42a_a : NL42b_SP_f, NL43, NL44, NL45 : NL47) %>% View()  
 
 ```
 
