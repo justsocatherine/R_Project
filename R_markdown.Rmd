@@ -104,9 +104,17 @@ ESSclean %>% select(RESPNR, Wavevalue, PolKnowl1) %>% filter(RESPNR == 30016148	
 ```
 
 ```{r - CA tidying chunk}
+
+#First parse date in original object so all latter tables will already have a 'date' column. day = V3a, month = V3b, year = V3c.
+CA$date <-  with(CA, dmy(sprintf('%02d%02d%02d', V3a, V3b, V3c))) 
+CA$date
+
+
+
+
 #Creating table for fixed characteristics relevant to all, i.e. items asked to everything. Checked using console. 
 ALL_FIXED <- CA %>% 
-  select(V1,	V2,	V3a,	V3b,	V3c,	V4,	V5, V6,	V6_cleaned, NL1a : NL1f, V7, V8a, V8b, V9,V11, V12, V13, V14, V15a_TEXT : V15f_TEXT, V15_a_cleaned : V15_f_cleaned,  V16a : V16f, NL7a : NL7e, NL24, NL25, NL26, NL27, NL28a, NL28b, NL29a : NL29g, NL30, NL31, NL32a : NL32g, NL33)
+  select(V1,	V2,	V3a,	V3b,	V3c, date,	V4,	V5, V6,	V6_cleaned, NL1a : NL1f, V7, V8a, V8b, V9,V11, V12, V13, V14, V15a_TEXT : V15f_TEXT, V15_a_cleaned : V15_f_cleaned,  V16a : V16f, NL7a : NL7e, NL24, NL25, NL26, NL27, NL28a, NL28b, NL29a : NL29g, NL30, NL31, NL32a : NL32g, NL33)
 
 #Creating Newspaper fixed characteristics table. Note: nu.nl is included as a newspaper, because it is treated as one in the codebook. Keeping V4 as article ID for primary key, also keeping V4 (outlet) as may be useful also. 
 CA_FIXED_NP <- CA %>%
@@ -132,8 +140,10 @@ CA_FIXED_TV <- CA %>%
   summarise()
 
 
-APRIL <- CA %>% #Table with variables coded only after april the 17th
-  select(V9,	V9b,	V10a : V10c,	NL6_1_1 : NL6_3_4,	NL8a,	NL9a_1 : NL9a_5_TEXT, NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,	NL10a : NL10d, NL11a1 : NL23d5_TEXT,	NL34 : NL41f, NL42a_a : NL42b_SP_f, NL43, NL44, NL45 : NL47) %>% View()  
+APRIL <- CA %>% #Table with variables coded only after april the 17th #needs id and date added, then selected by date
+  select(V9,	V9b,	V10a : V10c,	NL6_1_1 : NL6_3_4,	NL8a,	NL9a_1 : NL9a_5_TEXT, NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,	NL10a : NL10d, NL11a1 : NL23d5_TEXT,	NL34 : NL41f, NL42a_a : NL42b_SP_f, NL43, NL44, NL45 : NL47) %>% View()
+  
+  
 
 ```
 
