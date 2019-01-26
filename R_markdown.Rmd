@@ -19,7 +19,7 @@ library(lubridate) #lubridate (@@remove this if we don't actually use it in the 
 CA <- read_csv("Dataset MCA EPE 2014 NL FINAL.csv") #Read content analysis file, store under CA
 # @ later remove this so also contetn analysis is imported here
 
-#ESS <- read_csv("All waves GENERAL.csv") # read survey file, store under ESS (Election Study Survey)
+ESS <- read_csv("All waves GENERAL.csv") # read survey file, store under ESS (Election Study Survey)
 
 #Tidying the data set. Step ONE: Seperate respondent fixed characteristics, with help of code book.
 #Examples of these: demographics, big 5 personality traits etc. Here the RESPONDENT is the unit. 
@@ -135,13 +135,18 @@ CA_FIXED_TV <- CA %>%
   select(V2,	V4, TV1, TV2)
 
 
-
 APRIL <- CA %>% #Table with variables coded only after april the 17th 
   select(V2, date, V9,	V9b,	V10a : V10c,	NL6_1_1 : NL6_3_4,	NL8a,	NL9a_1 : NL9a_5_TEXT, NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,	NL10a : NL10d, NL11a1 : NL23d5_TEXT,	NL34 : NL41f, NL42a_a : NL42b_SP_f, NL43, NL44, NL45 : NL47) %>% 
 filter(date >= as.Date("2014-04-17")) #and include cases only after filtered date, 17th April
 
   
-  
 
+```
+
+```{r}
+#Creating a tabel for the PVV 50PLUS problem stuff
+PVV50 <- CA %>%
+  select(NL8a, NL8b, NL8c, NL8d, NL9a_1 : NL9a_5_TEXT,NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,NL10a , NL10b, NL10c, NL10d, NL11a1 : NL11a5_TEXT, NL11b1 :NL11b5_TEXT, NL11c1 : NL11c5_TEXT, NL11d1 : NL11d5_TEXT, NL12a, NL12b, NL12c, NL12d, NL13a1 : NL13a5_TEXT, NL13b1 : NL13b5_TEXT, NL13c1 : NL13c5_TEXT, NL13d1 : NL13d5_TEXT, NL14a, NL14b, NL14c, NL14d,  NL15a1 : NL15a5_TEXT, NL15b1 : NL15b5_TEXT, NL15c1 : NL15c5_TEXT, NL15d1 : NL15d5_TEXT, NL16a, NL16b, NL16c, NL16d, NL17a1 : NL17a5_TEXT, NL17b1 : NL17b5_TEXT, NL17c1 : NL17c5_TEXT, NL17d1 : NL17d5_TEXT, NL18a, NL18b, NL18c, NL18d, NL19a1 : NL19a5_TEXT, NL19b1 :NL19b5_TEXT, NL19c1 : NL19c5_TEXT, NL19d1 : NL19d5_TEXT, NL20a, NL20b, NL20c, NL20d, NL21a1 : NL21a5_TEXT, NL21b1 : NL21b5_TEXT, NL21c1 : NL21c5_TEXT, NL21d1 : NL21d5_TEXT, NL22a, NL22b, NL22c, NL22d, NL23a1 : NL23a5_TEXT, NL23b1 : NL23b5_TEXT, NL23c1 : NL23c5_TEXT, NL23d1 : NL23d5_TEXT)
+  
 ```
 
