@@ -133,6 +133,40 @@ MUS_POL <- CA %>%
 #create variable "Origins" as factor with levels of different Nationalities: Muslims / followers of Islam, Moroccan origins, Turkish origins, Other national origins, Poles, Other specific Middle or Eastern nationals (from the EU), Middle and/or Eastern Europeans in general  (from the EU), Eastern European, but not EU (Russia, Ukraine, Belarus, Moldova)
 
 #NL2_1
+getOrigin <- function(datatable) {
+  case_when(
+    datatable$NL2_1_1 == 1 ~ 1,
+    datatable$NL2_1_2 == 1 ~ 1,
+    datatable$NL2_1_3 == 1 ~ 1, 
+    datatable$NL2_2_1 == 1 ~ 2,
+    datatable$NL2_2_2 == 1 ~ 2,
+    datatable$NL2_2_3 == 1 ~ 2, 
+    datatable$NL2_3_1 == 1 ~ 3,
+    datatable$NL2_3_2 == 1 ~ 3,
+    datatable$NL2_3_3 == 1 ~ 3, 
+    )
+}
+
+origin <-  getOrigin(MUS_POL)
+MUS_POL$origind <- origin
+
+getLocation <- fucntion(datatable) {
+  case_when(
+    datatable$NL2_1_1 == 1 ~ 1,
+    datatable$NL2_1_2 == 1 ~ 2,
+    datatable$NL2_1_3 == 1 ~ 3,
+    datatable$NL2_2_1 == 1 ~ 1,
+    datatable$NL2_2_2 == 1 ~ 2,
+    datatable$NL2_2_3 == 1 ~ 3,
+    datatable$NL2_3_1 == 1 ~ 1,
+    datatable$NL2_3_2 == 1 ~ 2,
+    datatable$NL2_3_3 == 1 ~ 3,
+  )
+}
+
+location <-  getLocation(MUS_POL)
+MUS_POL$lockationbrod <- location
+
 MUS_POL$ORG1 <- ifelse(MUS_POL$NL2_1_1 == 1, 1, ifelse(MUS_POL$NL2_1_2 == 1, 1, ifelse(MUS_POL$NL2_1_3, 1, 1, 0))) 
 
 #NL2_2
@@ -175,9 +209,7 @@ MUS_POL$ORG7 <- ifelse(MUS_POL$ORG7 == 1, 7, NA)
 MUS_POL$ORG8 <- ifelse(MUS_POL$ORG8 == 1, 8, NA)
 
 #combine ORG1:8 into one column
-gather(MUS_POL, ORG, ORG1, ORG2, ORG3, ORG4, ORG5, ORG6, ORG7, ORG8, sep = ",", remove = TRUE)
-
-ORG <- gather()
+MUS_POL <- MUS_POL %>% gather(origindesc, origin, ORG1:ORG8, na.rm = FALSE, convert = FALSE, factor_key = FALSE)
 
 
 
