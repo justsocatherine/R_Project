@@ -134,6 +134,8 @@ MUS_POL <- CA %>%
 
 #create variable "origin" with value 1 to 8 for different origins in variables NL2_1_1:NL2_4_3 and NL4_1_1:NL4_4_3
 
+#levels: 1 = Muslims/followers of Islam, 2 = Moroccan origins, 3 = Turkish origins, 4 = Other national origins, 5 = Poles, 6 = other specific middle or eastern nationals (from the EU)
+
 getOrigin <- function(datatable) {
   case_when(
     datatable$NL2_1_1 == 1 ~ 1,
@@ -168,6 +170,8 @@ origin <-  getOrigin(MUS_POL)
 MUS_POL$origin <- origin
 
 #do the same for location
+#Levels: 1 = in the Netherlands, 2 = In another country, 3 = in the "home" country
+
 getLocation <- function(datatable) {
   case_when(
     datatable$NL2_1_1 == 1 ~ 1,
@@ -199,6 +203,8 @@ location <-  getLocation(MUS_POL)
 MUS_POL$location <- location
 
 #do the same for evaluation
+#as in Codebook, Levels: 1 = no evaluation, 2 = negative, 3= rather negative, 4 = balanced/mixed, 5 = rather positive, 6 = positive
+
 getEvaluation <- function(datatable) {
   case_when(
     !is.na(datatable$NL3) ~ datatable$NL3,
