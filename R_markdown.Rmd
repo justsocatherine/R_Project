@@ -132,7 +132,8 @@ MUS_POL <- CA %>%
 
 #create variable "Origins" as factor with levels of different Nationalities: Muslims / followers of Islam, Moroccan origins, Turkish origins, Other national origins, Poles, Other specific Middle or Eastern nationals (from the EU), Middle and/or Eastern Europeans in general  (from the EU), Eastern European, but not EU (Russia, Ukraine, Belarus, Moldova)
 
-#N
+#create variable "origin" with value 1 to 8 for different origins in variables NL2_1_1:NL2_4_3 and NL4_1_1:NL4_4_3
+
 getOrigin <- function(datatable) {
   case_when(
     datatable$NL2_1_1 == 1 ~ 1,
@@ -162,9 +163,11 @@ getOrigin <- function(datatable) {
     )
 }
 
+#call function origin
 origin <-  getOrigin(MUS_POL)
 MUS_POL$origin <- origin
 
+#do the same for location
 getLocation <- function(datatable) {
   case_when(
     datatable$NL2_1_1 == 1 ~ 1,
@@ -191,15 +194,22 @@ getLocation <- function(datatable) {
   )
 }
 
+#call function location
 location <-  getLocation(MUS_POL)
 MUS_POL$location <- location
 
+#do the same for evaluation
 getEvaluation <- function(datatable) {
   case_when(
     !is.na(datatable$NL3) ~ datatable$NL3,
     !is.na(datatable$NL5) ~ datatable$NL5,
   )
 }
+
+
+
+#call function evaluation
+MUS_POL$evaluation <-  getEvaluation(MUS_POL)
 
 CA_FIXED_TV <- CA %>%
   filter(V4 == "NOS Journaal" | V4 == "RTL Nieuws")%>% #Exclude (filter out) the newspapers
