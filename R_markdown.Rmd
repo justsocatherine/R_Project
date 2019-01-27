@@ -133,25 +133,52 @@ MUS_POL <- CA %>%
 #create variable "Origins" as factor with levels of different Nationalities: Muslims / followers of Islam, Moroccan origins, Turkish origins, Other national origins, Poles, Other specific Middle or Eastern nationals (from the EU), Middle and/or Eastern Europeans in general  (from the EU), Eastern European, but not EU (Russia, Ukraine, Belarus, Moldova)
 
 #NL2_1
-MUS_POL$ORG <- ifelse(MUS_POL$NL2_1_1 == 1, 1, ifelse(MUS_POL$NL2_1_2 == 1, 1, ifelse(MUS_POL$NL2_1_3, 1, 1, 0))) 
+MUS_POL$ORG1 <- ifelse(MUS_POL$NL2_1_1 == 1, 1, ifelse(MUS_POL$NL2_1_2 == 1, 1, ifelse(MUS_POL$NL2_1_3, 1, 1, 0))) 
 
 #NL2_2
-MUS_POL$ORG <- ifelse(MUS_POL$NL2_2_1 == 1, 2, ifelse(MUS_POL$NL2_2_2 == 1, 2, ifelse(MUS_POL$NL2_2_3, 1, 2, 0)))
+MUS_POL$ORG2 <- ifelse(MUS_POL$NL2_2_1 == 1, 1, ifelse(MUS_POL$NL2_2_2 == 1, 1, ifelse(MUS_POL$NL2_2_3, 1, 1, 0)))
 
 #NL2_3
-MUS_POL$ORG <- ifelse(MUS_POL$NL2_3_1 == 1, 3, ifelse(MUS_POL$NL2_3_2 == 1, 3, ifelse(MUS_POL$NL2_3_3, 1, 3, 0)))
+MUS_POL$ORG3 <- ifelse(MUS_POL$NL2_3_1 == 1, 1, ifelse(MUS_POL$NL2_3_2 == 1, 1, ifelse(MUS_POL$NL2_3_3, 1, 1, 0)))
 
 #NL2_4
-MUS_POL$ORG <- ifelse(MUS_POL$NL2_3_1 == 1, 3, ifelse(MUS_POL$NL2_3_2 == 1, 3, ifelse(MUS_POL$NL2_3_3, 1, 3, 0)))
+MUS_POL$ORG4 <- ifelse(MUS_POL$NL2_4_1 == 1, 1, ifelse(MUS_POL$NL2_4_2 == 1, 1, ifelse(MUS_POL$NL2_4_3, 1, 1, 0)))
 
 #NL4_1
+MUS_POL$ORG5 <- ifelse(MUS_POL$NL4_1_1 == 1, 1, ifelse(MUS_POL$NL4_1_2 == 1, 1, ifelse(MUS_POL$NL4_1_3, 1, 1, 0)))
 
 #NL4_2
+MUS_POL$ORG6 <- ifelse(MUS_POL$NL4_2_1 == 1, 1, ifelse(MUS_POL$NL4_2_2 == 1, 1, ifelse(MUS_POL$NL4_2_3, 1, 1, 0)))
 
 #NL4_3
+MUS_POL$ORG7 <- ifelse(MUS_POL$NL4_3_1 == 1, 1, ifelse(MUS_POL$NL4_3_2 == 1, 1, ifelse(MUS_POL$NL4_3_3, 1, 1, 0)))
 
 #NL4_4
+MUS_POL$ORG8 <- ifelse(MUS_POL$NL4_4_1 == 1, 1, ifelse(MUS_POL$NL4_4_2 == 1, 1, ifelse(MUS_POL$NL4_4_3, 1, 1, 0)))
 
+#NL2_1
+MUS_POL$ORG1 <- ifelse(MUS_POL$ORG1 == 1, 1, NA)
+#NL2_2
+MUS_POL$ORG2 <- ifelse(MUS_POL$ORG2 == 1, 2, NA)
+#NL2_3
+MUS_POL$ORG3 <- ifelse(MUS_POL$ORG3 == 1, 3, NA)
+#NL2_4
+MUS_POL$ORG4 <- ifelse(MUS_POL$ORG4 == 1, 4, NA)
+
+#NL4_1
+MUS_POL$ORG5 <- ifelse(MUS_POL$ORG5 == 1, 5, NA)
+#NL4_2
+MUS_POL$ORG6 <- ifelse(MUS_POL$ORG6 == 1, 6, NA)
+#NL4_3
+MUS_POL$ORG7 <- ifelse(MUS_POL$ORG7 == 1, 7, NA)
+#NL4_4
+MUS_POL$ORG8 <- ifelse(MUS_POL$ORG8 == 1, 8, NA)
+
+#remove WAVES and Wave columns
+ESSclean$Wave <- NULL
+
+#Create one out of Wave 1, 2, 3, 4
+ESSclean <- ESSclean %>% gather(Wave, Wavevalue, wave1:wave4, na.rm = TRUE, convert = FALSE, factor_key = FALSE)
 
 #Create new column called "wave2" in ESS, assign the value 1 = YES if respondent participated in wave 2, 0 = NO.
 
