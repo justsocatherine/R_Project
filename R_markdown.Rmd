@@ -130,12 +130,37 @@ MUS_POL <- CA %>%
   select(V2, V6, NL2_1_1 : NL2_4_3, NL3, NL4_1_1 : NL4_4_3, NL5) %>%
   filter(V6 == "Economy: Free movement of people within the EU (common market: including the Schengen agreement)" | V6 == "Immigration : EU immigration policy - regulating immigration from outside the EU (e.g. refugees, asylum, EU border" | V6 == "Immigration : Migration / immigration policy – regulating migration within the EU (e.g. labour migration from East" | V6 == "Immigration : Immigration policy (non-EU) - regulating immigration from outside the EU" | V6 == "Immigration : Immigrant integration" | V6 =="Immigration : Multiculturalism (cultural diversity, cultural plurality)" | V6 == "Immigration : Anti-Islam" | V6 == "Immigration : Other immigration topics" | V6 == "Culture and Other: Religion" | V6 == "Citizens’ rights: Immigrant rights" | V6 == "Elections: Media coverage of the campaign") 
 
-#each observation must have its own row
-MUSS_POL$NL2_1_1 <- ifelse(ESS$WAVES == "All waves", 1, ifelse(ESS$WAVES == "Wave 1 and 2", 1, ifelse(ESS$WAVES == "Wave 1, 2 and 3", 1, 0))) #Create new column called "wave2" in ESS, assign the value 1 = YES if respondent participated in wave 2, 0 = NO.
+#create variable "Origins" as factor with levels of different Nationalities: Muslims / followers of Islam, Moroccan origins, Turkish origins, Other national origins, Poles, Other specific Middle or Eastern nationals (from the EU), Middle and/or Eastern Europeans in general  (from the EU), Eastern European, but not EU (Russia, Ukraine, Belarus, Moldova)
 
-#create new row MUS/POL
+#NL2_1
+MUS_POL$ORG <- ifelse(MUS_POL$NL2_1_1 == 1, 1, ifelse(MUS_POL$NL2_1_2 == 1, 1, ifelse(MUS_POL$NL2_1_3, 1, 1, 0))) 
+
+#NL2_2
+MUS_POL$ORG <- ifelse(MUS_POL$NL2_2_1 == 1, 2, ifelse(MUS_POL$NL2_2_2 == 1, 2, ifelse(MUS_POL$NL2_2_3, 1, 2, 0)))
+
+#NL2_3
+MUS_POL$ORG <- ifelse(MUS_POL$NL2_3_1 == 1, 3, ifelse(MUS_POL$NL2_3_2 == 1, 3, ifelse(MUS_POL$NL2_3_3, 1, 3, 0)))
+
+#NL2_4
+MUS_POL$ORG <- ifelse(MUS_POL$NL2_3_1 == 1, 3, ifelse(MUS_POL$NL2_3_2 == 1, 3, ifelse(MUS_POL$NL2_3_3, 1, 3, 0)))
+
+#NL4_1
+
+#NL4_2
+
+#NL4_3
+
+#NL4_4
 
 
+#Create new column called "wave2" in ESS, assign the value 1 = YES if respondent participated in wave 2, 0 = NO.
+
+#create variable "Origins" as factor with levels of different Nationalities: Muslims / followers of Islam, Moroccan origins, Turkish origins, Other national origins, Poles, Other specific Middle or Eastern nationals (from the EU), Middle and/or Eastern Europeans in general  (from the EU), Eastern European, but not EU (Russia, Ukraine, Belarus, Moldova)
+
+MUSS_POL$origin <- c("Muslims/followers of Islam", "Moroccan origins", "Turkish origins", "Other national origins", "poles", "other specific middle or eastern nationals in general (from the EU)", "middle and/or Eastern European in general (from the EU)", "Eastern European, but not EU (Russia, Ukraine, Belarus, Moldova)")
+MUSS_POL <- mutate()
+
+MUSS_POL$Nationality <- ifelse(NL2_1_1 == "1", )
 
 CA_FIXED_TV <- CA %>%
   filter(V4 == "NOS Journaal" | V4 == "RTL Nieuws")%>% #Exclude (filter out) the newspapers
