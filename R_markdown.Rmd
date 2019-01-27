@@ -206,8 +206,6 @@ getEvaluation <- function(datatable) {
   )
 }
 
-
-
 #call function evaluation
 MUS_POL$evaluation <-  getEvaluation(MUS_POL)
 
