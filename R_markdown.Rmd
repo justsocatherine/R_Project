@@ -130,6 +130,13 @@ MUS_POL <- CA %>%
   select(V2, V6, NL2_1_1 : NL2_4_3, NL3, NL4_1_1 : NL4_4_3, NL5) %>%
   filter(V6 == "Economy: Free movement of people within the EU (common market: including the Schengen agreement)" | V6 == "Immigration : EU immigration policy - regulating immigration from outside the EU (e.g. refugees, asylum, EU border" | V6 == "Immigration : Migration / immigration policy – regulating migration within the EU (e.g. labour migration from East" | V6 == "Immigration : Immigration policy (non-EU) - regulating immigration from outside the EU" | V6 == "Immigration : Immigrant integration" | V6 =="Immigration : Multiculturalism (cultural diversity, cultural plurality)" | V6 == "Immigration : Anti-Islam" | V6 == "Immigration : Other immigration topics" | V6 == "Culture and Other: Religion" | V6 == "Citizens’ rights: Immigrant rights" | V6 == "Elections: Media coverage of the campaign") 
 
+#each observation must have its own row
+MUSS_POL$NL2_1_1 <- ifelse(ESS$WAVES == "All waves", 1, ifelse(ESS$WAVES == "Wave 1 and 2", 1, ifelse(ESS$WAVES == "Wave 1, 2 and 3", 1, 0))) #Create new column called "wave2" in ESS, assign the value 1 = YES if respondent participated in wave 2, 0 = NO.
+
+#create new row MUS/POL
+
+
+
 CA_FIXED_TV <- CA %>%
   filter(V4 == "NOS Journaal" | V4 == "RTL Nieuws")%>% #Exclude (filter out) the newspapers
   select(V2,	V4, TV1, TV2)
@@ -146,7 +153,8 @@ filter(date >= as.Date("2014-04-17")) #and include cases only after filtered dat
 ```{r}
 #Creating a tabel for the PVV 50PLUS problem stuff
 PVV50 <- CA %>%
-  select(NL8a, NL8b, NL8c, NL8d, NL9a_1 : NL9a_5_TEXT,NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,NL10a , NL10b, NL10c, NL10d, NL11a1 : NL11a5_TEXT, NL11b1 :NL11b5_TEXT, NL11c1 : NL11c5_TEXT, NL11d1 : NL11d5_TEXT, NL12a, NL12b, NL12c, NL12d, NL13a1 : NL13a5_TEXT, NL13b1 : NL13b5_TEXT, NL13c1 : NL13c5_TEXT, NL13d1 : NL13d5_TEXT, NL14a, NL14b, NL14c, NL14d,  NL15a1 : NL15a5_TEXT, NL15b1 : NL15b5_TEXT, NL15c1 : NL15c5_TEXT, NL15d1 : NL15d5_TEXT, NL16a, NL16b, NL16c, NL16d, NL17a1 : NL17a5_TEXT, NL17b1 : NL17b5_TEXT, NL17c1 : NL17c5_TEXT, NL17d1 : NL17d5_TEXT, NL18a, NL18b, NL18c, NL18d, NL19a1 : NL19a5_TEXT, NL19b1 :NL19b5_TEXT, NL19c1 : NL19c5_TEXT, NL19d1 : NL19d5_TEXT, NL20a, NL20b, NL20c, NL20d, NL21a1 : NL21a5_TEXT, NL21b1 : NL21b5_TEXT, NL21c1 : NL21c5_TEXT, NL21d1 : NL21d5_TEXT, NL22a, NL22b, NL22c, NL22d, NL23a1 : NL23a5_TEXT, NL23b1 : NL23b5_TEXT, NL23c1 : NL23c5_TEXT, NL23d1 : NL23d5_TEXT) 
+  select(V2, NL8a, NL8b, NL8c, NL8d, NL9a_1 : NL9a_5_TEXT,NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,NL10a , NL10b, NL10c, NL10d, NL11a1 : NL11a5_TEXT, NL11b1 :NL11b5_TEXT, NL11c1 : NL11c5_TEXT, NL11d1 : NL11d5_TEXT, NL12a, NL12b, NL12c, NL12d, NL13a1 : NL13a5_TEXT, NL13b1 : NL13b5_TEXT, NL13c1 : NL13c5_TEXT, NL13d1 : NL13d5_TEXT, NL14a, NL14b, NL14c, NL14d,  NL15a1 : NL15a5_TEXT, NL15b1 : NL15b5_TEXT, NL15c1 : NL15c5_TEXT, NL15d1 : NL15d5_TEXT, NL16a, NL16b, NL16c, NL16d, NL17a1 : NL17a5_TEXT, NL17b1 : NL17b5_TEXT, NL17c1 : NL17c5_TEXT, NL17d1 : NL17d5_TEXT, NL18a, NL18b, NL18c, NL18d, NL19a1 : NL19a5_TEXT, NL19b1 :NL19b5_TEXT, NL19c1 : NL19c5_TEXT, NL19d1 : NL19d5_TEXT, NL20a, NL20b, NL20c, NL20d, NL21a1 : NL21a5_TEXT, NL21b1 : NL21b5_TEXT, NL21c1 : NL21c5_TEXT, NL21d1 : NL21d5_TEXT, NL22a, NL22b, NL22c, NL22d, NL23a1 : NL23a5_TEXT, NL23b1 : NL23b5_TEXT, NL23c1 : NL23c5_TEXT, NL23d1 : NL23d5_TEXT)
+
   
 ```
 
