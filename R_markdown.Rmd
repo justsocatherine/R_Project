@@ -19,6 +19,8 @@ knitr::opts_chunk$set(echo = TRUE)
 #Set code chunks to echo = False
 #@@More to be added to list of shit to do... 
 
+##CONTENT ANALYSIS SET STILL NEEDS TO BE CHECKED FOR OTHER RULES OF TIDYING!!!!!!!!
+
 
 ```
 
