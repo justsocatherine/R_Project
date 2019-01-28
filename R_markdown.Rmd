@@ -89,6 +89,8 @@ plot(pressure)
 #select relevant variables for all waves
 ESSclean <- select(ESS, -c(INTNR, SAMPLE,	GEWICHTA1_w1,	GEWICHTA1_w2,	GEWICHTA1_w3,	GEWICHTA1_w4,	GSL,	LFT,	OPLA,	NIELSENCBS,	GEZINSGROOTTE,	POL2012, w1_q5_1, w1_q5_2, w1_q5_3, w1_q5_4, w1_q17_1, w1_q17_2, w1_q17_3, w1_q17_4, w1_q23, w1_q24_1, w1_q24_2, w1_q24_3, w1_q29, w1_q30_1,w1_q30_2,	w1_q30_3,	w1_q30_4,	w1_q30_5,	w1_q30_6,	w1_q30_7,	w1_q30_8,	w1_q30_9,	w1_q30_10,	w1_q30_11, w1_q31_1,	w1_q31_2,	w1_q31_3,	w1_q31_4,	w1_q31_5,	w1_q31_6,	w1_q31_7,	w1_q31_8,	w1_q31_9,	w1_q32_1,	w1_q32_2,	w1_q32_3,	w1_q32_4, w1_q57_1,	w1_q57_2,	w1_q57_3,	w1_q57_4,	w1_q57_5,	w1_q57_6,	w1_q57_7,	w1_q57_8,	w1_q58_1,	w1_q58_2,	w1_q58_3,	w1_q58_4,	w1_q58_5,	w1_q58_6,	w1_q58_7,	w1_q58_8,	w1_q58_9,	w1_q58_10,	w1_q59,	w1_q60,	w1_q61,	w1_q62,	w1_q64,	w1_q65,	w1_q66,	w1_q67,	w1_q68,	w1_q68_YES, w2_q25,	w2_q26_1,	w2_q26_2,	w2_q26_3,	w2_q26_4,	w2_q26_5,	w2_q26_6,	w2_q26_7,	w2_q26_8,	w2_q26_9,	w2_q26_10,	w2_q26_11,	w2_q27_1,	w2_q27_2,	w2_q27_3,	w2_q27_4,	w2_q27_5,	w2_q27_6,	w2_q27_7,	w2_q27_8,	w2_q27_9,	w2_q28_1,	w2_q28_2,	w2_q28_3,	w2_q28_4,	w2_q28_5,	w2_q28_6,	w2_q28_7,	w2_q28_8,	w2_q28_9,	w2_q28_10,	w2_q28_11,	w2_q29,	w2_q30,	w2_q30_OTHER_LOCAL,	w2_q30_OTHER,	w2_q31,	w2_q32_1,	w2_q32_2,	w2_q32_3,	w2_q32_4,	w2_q32_5,	w2_q32_OTHER,	w2_q33_1,	w2_q33_2,	w2_q33_3,	w2_q33_4,	w2_q33_5,	w2_q33_6,	w2_q33_7,	w2_q33_8,	w2_q33_9,	w2_q33_10,	w2_q33_11,	w2_q33_12,	w2_q33_13,	w2_q33_14,	w2_q33_OTHER_LOCAL,	w2_q33_OTHER,	w2_q50_1,	w2_q50_2,	w2_q50_3,	w2_q50_4,	w2_q50_5,	w2_q50_6,	w2_q51,	w2_q52_1,	w2_q52_2,	w2_q52_3,	w2_q52_4,	w2_q52_5,	w2_q53_1,	w2_q53_2,	w2_q54,	w2_q55,	w2_q56_1,	w2_q56_2,	w2_q56_3,	w2_q56_4, w2_q61_1,	w2_q61_2,	w2_q62_CONDITION1,	w2_q62_CONDITION2, w2_q63,	w2_q65, w3_q49TRUE_1,	w3_q49TRUE_2,	w3_q49TRUE_3,	w3_q49TRUE_4,	w3_q49TRUE_5,	w3_q49TRUE_6,	w3_q49TRUE_7,	w3_q49_1,	w3_q49_2,	w3_q49_3,	w3_q49_4,	w3_q49_5,	w3_q49_6,	w3_q49_7, w3_q56_CONDITION1_1,	w3_q56_CONDITION1_2,	w3_q56_CONDITION1_3,	w3_q56_CONDITION1_4,	w3_q56_CONDITION2_1,	w3_q56_CONDITION2_2,	w3_q56_CONDITION2_3,	w3_q56_CONDITION2_4,	w3_q56_TIMESTAMP, w3_q59_1,	w3_q59_2,	w3_q59_3,	w3_q60_1,	w3_q60_2,	w3_q60_3,	w3_q60_4, w4_q7,	w4_q8,	w4_q9, w4_q27, w4_q41_1,	w4_q41_2,	w4_q41_3,	w4_q41_4,	w4_q41_5,	w4_q41_6,	w4_q41_7,	w4_q41_8,	w4_q41_9,	w4_q41_10,	w4_q41_11, w4_q41_12,  w4_q43_1,	w4_q43_2,	w4_q43_3,	w4_q43_4,	w4_q43_5,	w4_q43_6,	w4_q43_7,	w4_q43_8,	w4_q43_9,	w4_q43_10,	w4_q43_11,	w4_q43_12, w4_q51_1,	w4_q51_2,	w4_q51_3,	w4_q51_4,	w4_q51_5,	w4_q51_OTHER,	w4_q52_1,	w4_q52_2,	w4_q52_3,	w4_q52_4,	w4_q52_5,	w4_q52_6,	w4_q52_7,	w4_q52_8,	w4_q52_9,	w4_q52_10,	w4_q52_11,	w4_q52_12,	w4_q52_13,	w4_q52_OTHER, w4_q57, w4_q62_1,	w4_q62_2,	w4_q62_3,	w4_q62_4,	w4_q62_5,	w4_q62_6,	w4_q62_7, wave1, wave2, wave3, wave4))
 
+#Example tidying subset of this table,  using the polknow questions:
+
 #Change values 1 (=TRUE) to 2 (=participates in wave 2)
 #Wave 1
 ESSclean$wave1 <- ifelse(ESS$wave1 == 1, 1, NA)
@@ -137,7 +139,7 @@ CA_FIXED_NP <- CA %>%
   filter(V4 != "NOS Journaal" & V4 != "RTL Nieuws")%>% #Exclude (filter out) the two TV channels
   select(V2,	V4, NP1,	NP2,	NP3,	NP4,	NP5,	NP6,	NP7) 
 
-#Creating Table for the Muslim/Polish questions, which have very different structure to the rest of data
+#@@This should be edited if we claim PVV+50PLUS table is also similar@@@Creating Table for the Muslim/Polish questions, which have very different structure to the rest of data
 #NL2_1_1: NL2_4_3 = the table questions on p. 11 of codebook concerning muslims, and NL4 starting items are
 #for the sae q's but Polish. Articles had these questions based on their primary topic, as stated on p. 10 of 
 # the codebook '(V6) = [0124 | 0501 thru 0507 | 0704 | 1204 | 1603]'. Therefore only articles/news with these 
@@ -285,6 +287,7 @@ filter(date >= as.Date("2014-04-17")) #and include cases only after filtered dat
 PVV50 <- CA %>% #@@Ask whether we have to totally redo this table or not.
   filter(date >= as.Date("2014-04-17"))%>% #and include cases only after filtered date, 17th April
   dplyr::select(V2, NL8a, NL8b, NL8c, NL8d, NL9a_1:NL9a_5_TEXT, NL9b_1:NL9b_5_TEXT, NL9c1:NL9c5_TEXT, NL9d1:NL9d5_TEXT, NL10a, NL10b, NL10c, NL10d, NL11a1:NL11a5_TEXT, NL11b1:NL11b5_TEXT, NL11c1:NL11c5_TEXT, NL11d1:NL11d5_TEXT, NL12a, NL12b, NL12c, NL12d, NL13a1:NL13a5_TEXT, NL13b1:NL13b5_TEXT, NL13c1:NL13c5_TEXT, NL13d1:NL13d5_TEXT, NL14a, NL14b, NL14c, NL14d,  NL15a1:NL15a5_TEXT, NL15b1:NL15b5_TEXT, NL15c1:NL15c5_TEXT, NL15d1:NL15d5_TEXT, NL16a, NL16b, NL16c, NL16d, NL17a1:NL17a5_TEXT, NL17b1:NL17b5_TEXT, NL17c1:NL17c5_TEXT, NL17d1:NL17d5_TEXT, NL18a, NL18b, NL18c, NL18d, NL19a1:NL19a5_TEXT, NL19b1:NL19b5_TEXT, NL19c1:NL19c5_TEXT, NL19d1:NL19d5_TEXT, NL20a, NL20b, NL20c, NL20d, NL21a1:NL21a5_TEXT, NL21b1:NL21b5_TEXT, NL21c1:NL21c5_TEXT, NL21d1:NL21d5_TEXT, NL22a, NL22b, NL22c, NL22d, NL23a1:NL23a5_TEXT, NL23b1:NL23b5_TEXT, NL23c1:NL23c5_TEXT, NL23d1:NL23d5_TEXT)
+
 
 
 
