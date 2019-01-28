@@ -1,12 +1,25 @@
 ---
 title: "@@Add title"
-author: "Katerin Kunfermann, 12225223@@@@add names, Student numbers etc"
+author: "Katerin Kunfermann, Haylee Kelsall 11665424, 12225223@@@@add names, Student numbers etc"
 date: "17 January 2019"
 output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+#@@Jobs before handing in: 
+#Check code is actually tide for the group part. Is it as concise as possible? e.g. replace nl1a, nl1b, nl1c with nl1a:nl1c. 
+#Check there is enough detail given in tiying explanations, including e.g. 'viewed it using head(x) and checked compared to...'
+#Check entire thing ACTUALLY runs
+#Check spelling, cntrl+f search for @ signs notes to be done/removed
+#WRITE TEXT INTRODUCING THE OVERALL INFOGRAPHIC... Somehow
+#Do all visualisation fit together somehow in terms of style?
+#All names on the document? Title? Date? Etc. 
+#How does the text knit? 
+#Set code chunks to echo = False
+#@@More to be added to list of shit to do... 
+
+
 ```
 
 
