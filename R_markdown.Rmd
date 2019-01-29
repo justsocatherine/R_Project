@@ -133,6 +133,9 @@ CA$date <- with(CA, dmy(sprintf('%02d%02d%02d', V3a, V3b, V3c))) #Checked in con
 ALL_FIXED <- CA %>% 
   select(V1,	V2,	V3a,	V3b,	V3c, date,	V4,	V5, V6,	V6_cleaned, NL1a : NL1f, V7, V8a, V8b, V9,V11, V12, V13, V14, V15a_TEXT : V15f_TEXT, V15_a_cleaned : V15_f_cleaned,  V16a : V16f, NL7a : NL7e, NL24, NL25, NL26, NL27, NL28a, NL28b, NL29a : NL29g, NL30, NL31, NL32a : NL32g, NL33) #Include V's asked for all
 
+#pull apart column V6_cleaned into two columns by splitting at the ":" 
+ALL_FIXED <- separate(ALL_FIXED, V6_cleaned, into = c("V6Topic", "V6Topicdescription"), sep = ":")
+
 #Creating Newspaper fixed characteristics table. Note: nu.nl is included as a newspaper, because it is treated as one in the codebook. Keeping V4 as article ID for primary key, also keeping V4 (outlet) as may be useful also. In addition, note that the belgium outlets are included as they're treated as newspapers. These
 #need to probably be removed if neccessary during later analysis!
 CA_FIXED_NP <- CA %>%
