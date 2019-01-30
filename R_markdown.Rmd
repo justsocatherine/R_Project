@@ -103,6 +103,8 @@ ESSclean$wave4 <- ifelse(ESS$wave4 == 1, 4, NA)
 #Create one out of Wave 1, 2, 3, 4
 ESSclean <- ESSclean %>% gather(Wave, Wavevalue, wave1:wave4, na.rm = TRUE, convert = FALSE, factor_key = FALSE)
 
+
+
 #remove WAVES and Wave columns
 ESSclean$Wave <- NULL
 
@@ -134,8 +136,9 @@ library(lubridate)
 #First parse date in original object so all latter tables will already have a 'date' column. day = V3a, month = V3b, year = V3c.
 CA$date <- with(CA, dmy(sprintf('%02d%02d%02d', V3a, V3b, V3c))) #Checked in console!
 #Also need to add unique id number to each item
-CA <- CA %>%
-  mutate(ID = row_number())
+CA$ID <- seq.int(nrow(CA))
+
+CA$ID
 
 #Creating table for fixed characteristics relevant to all, i.e. items asked to everything. Checked using console. 
 ALL_FIXED <- CA %>% 
