@@ -370,7 +370,7 @@ p <- ggplot(data = MAT2, aes(x = PoliticalKnowledge, y = AntiImmigrationLevel)) 
   scale_fill_gradient(low = "#00AFBB", high = "#FC4E07")+
   theme_minimal()  + facet_wrap(~Wavevalue)
 
-#Displaying the plot
+#Displaying the final plot
 p <- ggplotly(p)
 p
 
