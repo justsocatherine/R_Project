@@ -1,8 +1,7 @@
 ---
-title: '@@Add title'
-author: Katerin Kunfermann, Haylee Kelsall 11665424, Louelle Pesurnaij 12225223@@@@add
-  names, Student numbers etc
-date: "17 January 2019"
+title: 'European Election Campaign Study 2014'
+author: Katerin Kunfermann (), Haylee Kelsall (11665424), Louelle Pesurnaij (10750886), Matteo Rinaldi ()
+date: "31 January 2019"
 output:
   html_document:
     df_print: paged
@@ -81,12 +80,6 @@ RESP_DEMOG_test <- RESP_DEMOG %>% group_by(RESPNR, w3_q56_CONDITION1_1, w3_q56_C
 RESP_DEMOG$W3_Q56_CONDITION <- ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_1), 1, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_2), 1, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_3), 1, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_4), 1, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION2_1), 2, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION2_2), 2, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION2_3), 2, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION2_4), 2, NA)))))))) 
 
 ```
-
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
 
 
 ```{r Spread the waveeeeees}
