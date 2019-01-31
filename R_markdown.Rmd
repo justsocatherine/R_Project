@@ -535,7 +535,9 @@ In 1972, McCombs and Shaw published their seminal article, _"The agenda-setting 
 The interactive graph below plots the mean monthly EU-attitudes score of readers versus the EU-attitudes presented in the newspaper they read (either de Telegraaf, NRC Handelsblad or de Volkskraant). The individual dots represent unique readers' EU-attitudes by month - an average score based on 18 items. Interestingly, individuals consistently held more pro-European attitudes than the newspapers they read, and for each newspaper, we see individual cases which deviate from the rest of the group, such as the two lone Telegraaf readers in March with _very_ pro-EU attitudes. Unfortunately it is difficult to conclude whether indeed reader attitudes are influenced by those in the press, or whether it is that readers opt for news outlets which reflect their pre-existing beliefs. However, the slopes of the lines do suggest there may be a pattern between reader attitudes and those in their respective paper, and looking at this over a longer period may provide confirmation that indeed such a relationship exists. For now however what is clear is that in the Netherlands, citizens' appear to be far more supportive of the European Project than the daily newspapers which they read. 
 
 
-```{r Haylee chunk, ECHO = FALSE}
+```{r Haylee chunk, echo = FALSE, warning = FALSE, message = FALSE}
+
+library(plyr)
 
 #First, I will work with the content analysis set. First selecting items of interest, some identifying characteristics (e.g. outlet, ID), along with the EU evaluation items.   
 EUCA_set <- ALL_FIXED %>% 
