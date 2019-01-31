@@ -436,7 +436,7 @@ p <- p + theme(panel.grid.minor = element_blank())
 p
 ```
 
-With the graph above, the relationship between Dutch media coverage (both newspaper, TV and online) and pulitical cynicism amongst the public is shown. Both the amount of articles about elections and the (average) score on political cynicism (from 1 -totally disagree- to 7 -totally agree-) are plotted over time. 
+With the graph above, the relationship between Dutch media coverage (both newspaper, TV and online) and political cynicism amongst the public is shown. Both the amount of articles about elections and the (average) score on political cynicism (from 1 -totally disagree- to 7 -totally agree-) are plotted over time. 
 
 The graph shows that the amount of Dutch articles obout the 2014 EU Elections does not have a direct influence on political cynicism amongst the public. The average score on political cynicism stays somewhat fixed over time.
 
