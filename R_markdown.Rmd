@@ -35,8 +35,17 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r import survey data and access packages, include=FALSE, message = FALSE, warning = FALSE}
 library(tidyverse) #access tidyverse
-library(lubridate) #lubridate (@@remove this if we don't actually use it in the end)
-#@@add other additional packages needed here - e.g. for interactive plots etc. 
+library(lubridate) #lubridate
+library(plyr) 
+library(plotly)
+library(ggthemes)
+
+
+#Stripper function used in some data work
+
+stripper <- function(string){ 
+  str_extract(string, "\\-*\\d+\\.*\\d*")
+} 
 
 CA <- read_csv("Dataset MCA EPE 2014 NL FINAL.csv") #Read content analysis file, store under CA
 # @ later remove this so also contetn analysis is imported here
@@ -511,3 +520,242 @@ p
 ```
 
 In this graphical representation I am using the data from the survey conducted between December 2013 and May 2014 about the attitudes and intentions of citizens towards the European Union. I decided to analyse the interaction between the political knowledge of the surveyd sample and their attitudes towards immigration. I was expecting this relation to be negative: the more one knows about politics and its complexity, the more should be aware that immigration is a complex process and that immigrants are not to blame for the core of the problem itself. I conducted the analysis by recoding the measurement for political knowledge as a dummy variable (right/wrong, coded as 1/0) and by recoding the variables measuring anti-immigrant attitudes by deciding that cases scoring higher or equal to 5 (on a 1 - 7 Likert scale) had to be considered like having a negative attitude toward immigrants, scoring then with a 1. I then created two new variables which are the mean of these results for each participant. I proceeded displaying how the interaction took place with a visualization with ggplot. Interestingly, it seems like the people knowing average about politics (in the centre of the 2d table) are the ones having both the most extreme and most tolerant attitudes towards immigrants. The situation did not changed with the second wave.
+
+
+
+```{r Haylee chunk, ECHO = FALSE}
+
+#First, I will work with the content analysis set. First selecting items of interest, some identifying characteristics (e.g. outlet, ID), along with the EU evaluation items.   
+EUCA_set <- ALL_FIXED %>% 
+dplyr::select(ID, V2, V4, date, V9, V11, V12, V13) %>% #Columns I need related to EU evaluations in CA
+  #I filter to select only items in the three newspapers, which will have had the evaluation coded (these were coded when V9 was "Yes, twice or more")
+  filter(V9 == "Yes, twice or more", V4 == "de Telegraaf" | V4 == "de Volkskrant" | V4 == "NRC Handelsblad") %>%
+  #Next, create a month factor variable
+  mutate(month = month(date, label = TRUE)) %>% 
+  #Drop any which are missing
+  drop_na(month)%>% 
+  #Create columns to indicate articles where the sentiment was evaluated re: EU
+  mutate(EU_EVAL = ifelse(V11 =="Not applicable / not mentioned" | V11 == "Mentioned but not evaluated", 0, "EU_EVAL"))%>%
+  mutate(EP_EVAL = ifelse(V12 =="Not applicable / not mentioned" | V12 == "Mentioned but not evaluated", 0, "EP_EVAL"))%>%
+  mutate(DEM_EVAL = ifelse(V13 =="Not applicable / not mentioned" | V13 == "Mentioned but not evaluated", 0, "DEM_EVAL"))%>%
+  #Gather these, and then mutate to create new rows for each article by evaluation type
+  gather(EV, value = EVAL, EU_EVAL:DEM_EVAL)%>%
+  mutate(EVALS = ifelse(EVAL == "EU_EVAL", V11, ifelse(EVAL == "EP_EVAL", V12, ifelse(EVAL == "DEM_EVAL", V13, NA))))%>%
+  #Drop cases which had no evaluation
+  na.omit(EVALS)%>%
+  #drop old columns
+  select(-c(V9, V11, V12, V13, EV))%>%
+  #recode evaluations into numeric values
+  mutate (EU_EVAL = as.numeric(case_when(EVALS == "Negative" ~ "1",
+            EVALS == "Rather negative" ~ "2",
+            EVALS == "Balanced/mixed" ~ "3", 
+            EVALS == "Rather positive" ~ "4",
+            EVALS == "Positive" ~ "5")))%>%
+  #recode evaluations scale from 1-5 to 1-7 so that it matches survey scale, in order to compare attitudes present in articles vs readers
+  mutate_at(c(8), funs(recode(., '1' = 1, '2' = 2.5, '3' = 4, '4' = 5.5, '5' = 7))) %>% 
+  #Calculate the mean evaluation score per article, and compress observations back to one per article
+  ddply( .(ID, V4, date, month), summarize, mean_eval = mean(EU_EVAL))%>% 
+#By selecting based on ID, V4, date and month, I s retain these columns, whilst calculating the mean EU-evaluation score for each article. In this case, a 1 represents negative, and 7 positive sentiment. Note, I checked this against doing it another way (add_column) to see if it worked correctly, and also checked it against cases in the viewer. 
+  ddply( .(month, V4), summarize, mean_NP_month = mean(mean_eval))
+
+#I now have a table of mean EU sentiment by newspaper, by month. Next to work on the Survey data. 
+
+H_EES <- ESSclean %>% 
+  #First select relevant variables
+  select(RESPNR, date, Wavevalue, w1_q26_1:w1_q27_9, w2_q22_1:w2_q23_9, w3_q28_1:w3_q29_9, w4_q31_1:w4_q32_9)%>% 
+ #Next, strip non-numeric characters from each row. In hindsight, this should have been done with parse_number(), which would have required only one line of code. This would have read : 
+  #mutate_at(c(4:75), funs(parse_number(.))). However, with little time to return and adjust all of the latter variable names, this code has been retained. If I had more time, after realising this mistake I would have adjusted this. Instead, I use the function stripper which relies on reg ex, combined with as.numeric.
+  
+#Wave 1 stripping
+  mutate(W1B1Q1 = as.numeric(stripper(w1_q26_1))) %>% 
+  mutate(W1B1Q2 = as.numeric(stripper(w1_q26_2))) %>%
+  mutate(W1B1Q3 = as.numeric(stripper(w1_q26_3))) %>%
+  mutate(W1B1Q4 = as.numeric(stripper(w1_q26_4))) %>% 
+  mutate(W1B1Q5 = as.numeric(stripper(w1_q26_5))) %>%
+  mutate(W1B1Q6 = as.numeric(stripper(w1_q26_6))) %>%
+  mutate(W1B1Q7 = as.numeric(stripper(w1_q26_7))) %>%
+  mutate(W1B1Q8 = as.numeric(stripper(w1_q26_8))) %>%
+  mutate(W1B1Q9 = as.numeric(stripper(w1_q26_9))) %>%
+  
+  mutate(W1B2Q1 = as.numeric(stripper(w1_q27_1)))%>% 
+  mutate(W1B2Q2 = as.numeric(stripper(w1_q27_2))) %>%
+  mutate(W1B2Q3 = as.numeric(stripper(w1_q27_3))) %>%
+  mutate(W1B2Q4 = as.numeric(stripper(w1_q27_4))) %>% 
+  mutate(W1B2Q5 = as.numeric(stripper(w1_q27_5))) %>%
+  mutate(W1B2Q6 = as.numeric(stripper(w1_q27_6))) %>%
+  mutate(W1B2Q7 = as.numeric(stripper(w1_q27_7))) %>%
+  mutate(W1B2Q8 = as.numeric(stripper(w1_q27_8))) %>%
+  mutate(W1B2Q9 = as.numeric(stripper(w1_q27_9))) %>%
+#Wave 2 questions
+  mutate(W2B1Q1 = as.numeric(stripper(w2_q22_1))) %>% 
+  mutate(W2B1Q2 = as.numeric(stripper(w2_q22_2))) %>%
+  mutate(W2B1Q3 = as.numeric(stripper(w2_q22_3))) %>%
+  mutate(W2B1Q4 = as.numeric(stripper(w2_q22_4))) %>% 
+  mutate(W2B1Q5 = as.numeric(stripper(w2_q22_5))) %>%
+  mutate(W2B1Q6 = as.numeric(stripper(w2_q22_6))) %>%
+  mutate(W2B1Q7 = as.numeric(stripper(w2_q22_7))) %>%
+  mutate(W2B1Q8 = as.numeric(stripper(w2_q22_8))) %>%
+  mutate(W2B1Q9 = as.numeric(stripper(w2_q22_9))) %>%
+  
+  mutate(W2B2Q1 = as.numeric(stripper(w2_q23_1)))%>% 
+  mutate(W2B2Q2 = as.numeric(stripper(w2_q23_2))) %>%
+  mutate(W2B2Q3 = as.numeric(stripper(w2_q23_3))) %>%
+  mutate(W2B2Q4 = as.numeric(stripper(w2_q23_4))) %>% 
+  mutate(W2B2Q5 = as.numeric(stripper(w2_q23_5))) %>%
+  mutate(W2B2Q6 = as.numeric(stripper(w2_q23_6))) %>%
+  mutate(W2B2Q7 = as.numeric(stripper(w2_q23_7))) %>%
+  mutate(W2B2Q8 = as.numeric(stripper(w2_q23_8))) %>%
+  mutate(W2B2Q9 = as.numeric(stripper(w2_q23_9))) %>%
+#Wave 3
+    mutate(W3B1Q1 = as.numeric(stripper(w3_q28_1))) %>% 
+  mutate(W3B1Q2 = as.numeric(stripper(w3_q28_2))) %>%
+  mutate(W3B1Q3 = as.numeric(stripper(w3_q28_3))) %>%
+  mutate(W3B1Q4 = as.numeric(stripper(w3_q28_4))) %>% 
+  mutate(W3B1Q5 = as.numeric(stripper(w3_q28_5))) %>%
+  mutate(W3B1Q6 = as.numeric(stripper(w3_q28_6))) %>%
+  mutate(W3B1Q7 = as.numeric(stripper(w3_q28_7))) %>%
+  mutate(W3B1Q8 = as.numeric(stripper(w3_q28_8))) %>%
+  mutate(W3B1Q9 = as.numeric(stripper(w3_q28_9))) %>%
+  
+  mutate(W3B2Q1 = as.numeric(stripper(w3_q29_1)))%>% 
+  mutate(W3B2Q2 = as.numeric(stripper(w3_q29_2))) %>%
+  mutate(W3B2Q3 = as.numeric(stripper(w3_q29_3))) %>%
+  mutate(W3B2Q4 = as.numeric(stripper(w3_q29_4))) %>% 
+  mutate(W3B2Q5 = as.numeric(stripper(w3_q29_5))) %>%
+  mutate(W3B2Q6 = as.numeric(stripper(w3_q29_6))) %>%
+  mutate(W3B2Q7 = as.numeric(stripper(w3_q29_7))) %>%
+  mutate(W3B2Q8 = as.numeric(stripper(w3_q29_8))) %>%
+  mutate(W3B2Q9 = as.numeric(stripper(w3_q29_9))) %>%
+#Wave 4
+  mutate(W4B1Q1 = as.numeric(stripper(w4_q31_1))) %>% 
+  mutate(W4B1Q2 = as.numeric(stripper(w4_q31_2))) %>%
+  mutate(W4B1Q3 = as.numeric(stripper(w4_q31_3))) %>%
+  mutate(W4B1Q4 = as.numeric(stripper(w4_q31_4))) %>% 
+  mutate(W4B1Q5 = as.numeric(stripper(w4_q31_5))) %>%
+  mutate(W4B1Q6 = as.numeric(stripper(w4_q31_6))) %>%
+  mutate(W4B1Q7 = as.numeric(stripper(w4_q31_7))) %>%
+  mutate(W4B1Q8 = as.numeric(stripper(w4_q31_8))) %>%
+  mutate(W4B1Q9 = as.numeric(stripper(w4_q31_9))) %>%
+  
+  mutate(W4B2Q1 = as.numeric(stripper(w4_q32_1)))%>% 
+  mutate(W4B2Q2 = as.numeric(stripper(w4_q32_2))) %>%
+  mutate(W4B2Q3 = as.numeric(stripper(w4_q32_3))) %>%
+  mutate(W4B2Q4 = as.numeric(stripper(w4_q32_4))) %>% 
+  mutate(W4B2Q5 = as.numeric(stripper(w4_q32_5))) %>%
+  mutate(W4B2Q6 = as.numeric(stripper(w4_q32_6))) %>%
+  mutate(W4B2Q7 = as.numeric(stripper(w4_q32_7))) %>%
+  mutate(W4B2Q8 = as.numeric(stripper(w4_q32_8))) %>%
+  mutate(W4B2Q9 = as.numeric(stripper(w4_q32_9))) %>%
+  select(RESPNR, date, Wavevalue, W1B1Q1:W4B2Q9) %>%
+
+  #In block 2 of the EU attitudes variables, items 5 through 8 are reverse coded. Therefore, I used the below command to check their column number, and recode these variables.
+#which(names(H_EES)%in%c("W1B2Q5", "W1B2Q8", "W2B2Q5", "W2B2Q8", "W3B2Q5", "W3B2Q8", "W4B2Q5", "W4B2Q8"))
+mutate_at(c(17:20, 35:38, 53:56, 71:74), funs(recode(., `1` = 7, `2` = 6, `3` = 5, `4` = 4, `5` = 3, `6` = 2, `7` = 1)))%>%
+#Based on the wave values for each respondent, I assign their score for each item in block 1 and block 2 of EU attitudes questions, otherwise NA.
+#Block 1 questions
+  mutate(B1Q1 = ifelse(Wavevalue == 1, W1B1Q1, ifelse(ESSclean$Wavevalue == 2, W2B1Q1, ifelse(Wavevalue == 3, W3B1Q1, ifelse(ESSclean$Wavevalue == 4, W4B1Q1, NA))))) %>%
+  mutate(B1Q2 = ifelse(Wavevalue == 1, W1B1Q2, ifelse(ESSclean$Wavevalue == 2, W2B1Q2, ifelse(Wavevalue == 3, W3B1Q2, ifelse(ESSclean$Wavevalue == 4, W4B1Q2, NA))))) %>%
+  mutate(B1Q3 = ifelse(Wavevalue == 1, W1B1Q3, ifelse(ESSclean$Wavevalue == 2, W2B1Q3, ifelse(Wavevalue == 3, W3B1Q3, ifelse(ESSclean$Wavevalue == 4, W4B1Q3, NA))))) %>%
+  mutate(B1Q4 = ifelse(Wavevalue == 1, W1B1Q4, ifelse(ESSclean$Wavevalue == 2, W2B1Q4, ifelse(Wavevalue == 3, W3B1Q4, ifelse(ESSclean$Wavevalue == 4, W4B1Q4, NA))))) %>%
+  mutate(B1Q5 = ifelse(Wavevalue == 1, W1B1Q5, ifelse(ESSclean$Wavevalue == 2, W2B1Q5, ifelse(Wavevalue == 3, W3B1Q5, ifelse(ESSclean$Wavevalue == 4, W4B1Q5, NA))))) %>%
+  mutate(B1Q6 = ifelse(Wavevalue == 1, W1B1Q6, ifelse(ESSclean$Wavevalue == 2, W2B1Q6, ifelse(Wavevalue == 3, W3B1Q6, ifelse(ESSclean$Wavevalue == 4, W4B1Q6, NA))))) %>%
+  mutate(B1Q7 = ifelse(Wavevalue == 1, W1B1Q7, ifelse(ESSclean$Wavevalue == 2, W2B1Q7, ifelse(Wavevalue == 3, W3B1Q7, ifelse(ESSclean$Wavevalue == 4, W4B1Q7, NA))))) %>%
+  mutate(B1Q8 = ifelse(Wavevalue == 1, W1B1Q8, ifelse(ESSclean$Wavevalue == 2, W2B1Q8, ifelse(Wavevalue == 3, W3B1Q8, ifelse(ESSclean$Wavevalue == 4, W4B1Q8, NA))))) %>% 
+mutate(B1Q9 = ifelse(Wavevalue == 1, W1B1Q9, ifelse(ESSclean$Wavevalue == 2, W2B1Q9, ifelse(Wavevalue == 3, W3B1Q9, ifelse(ESSclean$Wavevalue == 4, W4B1Q9, NA))))) %>%
+#Block 2 questions
+    mutate(B2Q1 = ifelse(Wavevalue == 1, W1B2Q1, ifelse(ESSclean$Wavevalue == 2, W2B2Q1, ifelse(Wavevalue == 3, W3B2Q1, ifelse(ESSclean$Wavevalue == 4, W4B2Q1, NA))))) %>%
+  mutate(B2Q2 = ifelse(Wavevalue == 1, W1B2Q2, ifelse(ESSclean$Wavevalue == 2, W2B2Q2, ifelse(Wavevalue == 3, W3B2Q2, ifelse(ESSclean$Wavevalue == 4, W4B2Q2, NA))))) %>%
+  mutate(B2Q3 = ifelse(Wavevalue == 1, W1B2Q3, ifelse(ESSclean$Wavevalue == 2, W2B2Q3, ifelse(Wavevalue == 3, W3B2Q3, ifelse(ESSclean$Wavevalue == 4, W4B2Q3, NA))))) %>%
+  mutate(B2Q4 = ifelse(Wavevalue == 1, W1B2Q4, ifelse(ESSclean$Wavevalue == 2, W2B2Q4, ifelse(Wavevalue == 3, W3B2Q4, ifelse(ESSclean$Wavevalue == 4, W4B2Q4, NA))))) %>%
+  mutate(B2Q5 = ifelse(Wavevalue == 1, W1B2Q5, ifelse(ESSclean$Wavevalue == 2, W2B2Q5, ifelse(Wavevalue == 3, W3B2Q5, ifelse(ESSclean$Wavevalue == 4, W4B2Q5, NA))))) %>%
+  mutate(B2Q6 = ifelse(Wavevalue == 1, W1B2Q6, ifelse(ESSclean$Wavevalue == 2, W2B2Q6, ifelse(Wavevalue == 3, W3B2Q6, ifelse(ESSclean$Wavevalue == 4, W4B2Q6, NA))))) %>%
+  mutate(B2Q7 = ifelse(Wavevalue == 1, W1B2Q7, ifelse(ESSclean$Wavevalue == 2, W2B2Q7, ifelse(Wavevalue == 3, W3B2Q7, ifelse(ESSclean$Wavevalue == 4, W4B2Q7, NA))))) %>%
+  mutate(B2Q8 = ifelse(Wavevalue == 1, W1B2Q8, ifelse(ESSclean$Wavevalue == 2, W2B2Q8, ifelse(Wavevalue == 3, W3B2Q8, ifelse(ESSclean$Wavevalue == 4, W4B2Q8, NA))))) %>% 
+mutate(B2Q9 = ifelse(Wavevalue == 1, W1B2Q9, ifelse(ESSclean$Wavevalue == 2, W2B2Q9, ifelse(Wavevalue == 3, W3B2Q9, ifelse(ESSclean$Wavevalue == 4, W4B2Q9, NA))))) %>%
+  #Drop the old columns
+  select(-c(W1B1Q1:W4B2Q9))%>%
+  #Calculate mean EU attitudes for each observation - i.e. by respondent, by wave
+  mutate(wave_mean = rowMeans(subset(., select = c(B1Q1:B2Q9), na.rm = TRUE)))%>%
+  #create month variable
+  mutate(month = month(date, label = TRUE)) %>%  #Create month column 
+  #drop old columns
+  select(-c(B1Q1:B2Q9)) 
+#This table contains the respondent ID, date of interview, wave number, mean score (per wave, per respondent), and month.
+
+#The next step is to establish which respondents read which paper, and when.
+
+READERS1 <- ESSclean %>% #First select relevant variables
+  select (RESPNR, date, Wavevalue, w1_q50_1:w1_q50_10, w2_q45_1:w2_q45_10, w3_q44_1:w3_q44_10, w4_q48_1:w4_q48_10)%>%
+  #Remove non-numeric characters from items asking how many days per week they read each outlet. NOTE: This is the function I should have used above instead of the stripper function I created.
+  mutate_at(c(4:43), funs(parse_number(.))) %>% 
+  #Create month variable
+  mutate(month = month(date, label = TRUE))%>%
+  #Identify which readers read which paper, in which wave. I selected newspaper readers based on their reading habits: If they read the paper of concern 5+ days per week, and reported that they read all other options less than 3 days per week.
+  mutate(PAPER = case_when(Wavevalue == 1 & w1_q50_1 >= 5 & w1_q50_2:w1_q50_10 < 3 ~ 1,
+         Wavevalue == 1 & w1_q50_2 >= 5 & w1_q50_1 < 3 & w1_q50_3: w1_q50_10 < 3 ~ 2, 
+         Wavevalue == 1 & w1_q50_6 >= 5 & w1_q50_1:w1_q50_5 < 3 & w1_q50_7: w1_q50_10 < 3 ~ 3,
+         Wavevalue == 2 & w2_q45_1 >= 5 & w2_q45_2:w2_q45_10 < 3 ~ 1,
+         Wavevalue == 2 & w2_q45_2 >= 5 & w2_q45_1 < 3 & w2_q45_3: w2_q45_10 < 3 ~ 2,
+         Wavevalue == 2 & w2_q45_6 >= 5 & w2_q45_1:w2_q45_5 < 3 & w2_q45_7: w2_q45_10 < 3 ~ 3,
+         Wavevalue == 3 & w3_q44_1 >= 5 & w3_q44_2:w3_q44_10 < 3 ~ 1,
+         Wavevalue == 3 & w3_q44_2 >= 5 & w3_q44_1 < 3 & w3_q44_3: w3_q44_10 < 3 ~ 2,
+         Wavevalue == 3 & w3_q44_6 >= 5 & w3_q44_1:w3_q44_5 < 3 & w3_q44_7: w3_q44_10 < 3 ~ 3,
+         Wavevalue == 4 & w4_q48_1 >= 5 & w4_q48_2:w4_q48_10 < 3 ~ 1,
+         Wavevalue == 4 & w4_q48_2 >= 5 & w4_q48_1 < 3 & w4_q48_3: w4_q48_10 < 3 ~ 2,
+         Wavevalue == 4 & w4_q48_6 >= 5 & w4_q48_1:w4_q48_5 < 3 & w4_q48_7: w4_q48_10 < 3 ~ 3,
+         TRUE ~ NA_real_)) %>%
+  #Keep relevant columns.
+  select(RESPNR, date, Wavevalue, PAPER)%>%
+  #Drop respondents who did not meet the conditions to be deemed a reader of a given newspaper.
+  na.omit(PAPER)%>%
+  #Left join with the readers attitudes table 
+  left_join(H_EES)%>%
+  #Recode outlet names so they're in line with the content analysis names.
+  mutate_at(c(4), funs(recode(., '1' = "de Telegraaf", '2' = "NRC Handelsblad", '3' = "de Volkskrant"))) 
+# I now have a table with a case for each respondent and wave (where applicable), the date, the outlet they're a reader of, their mean score for that wave, and the month. 
+
+# Using the table above, I need to create another, from which I will use the mean scores per respondent in the jitter geom of the plot. I'm not able to pipe this all the way through as I need two different tables from which to pull variables to plot, to show the individual respondents, and the means of the respondents/newspapers all on the same plot.
+
+READERS2 <- READERS1%>%
+  ddply( .(PAPER, month, wave_mean, date), summarize, mean_RESP_month = mean(wave_mean))%>% 
+  left_join(EUCA_set, by = c("PAPER" = "V4", "month" = "month"))%>%
+  #Select months which I have data for, name the levels in correct order
+  mutate(month2 = factor(month, levels = c("Dec", "Mar", "Apr", "May", "Jun")))%>% 
+  dplyr::filter(month2 != "Dec", month2 != "Jun") #Drop cases with the months Dec and Jun, the gap in observations between Dec-March is too large, and June had only a few cases per paper. 
+
+#Using READERS1, I will finalise the data and then plot using ggplot. This will be stored in the dataobject "READERS", and subsequently put into ggplotly()
+
+READERS <- READERS1 %>% 
+  ddply( .(PAPER, month), summarize, mean_RESP_month = mean(wave_mean))%>% #First calc means for respondents each month, and compress the table based on paper and month.
+  left_join(EUCA_set, by = c("PAPER" = "V4", "month" = "month"))%>% #Join this to the content analysis table, which is already structured by paper, by month. 
+  mutate(month2 = factor(month, levels = c("Dec", "Mar", "Apr", "May", "Jun")))%>% #Create month2 factor, selecting months with data, and correctly order them. Below, drop Dec/June observations. 
+  dplyr::filter(month2 != "Dec", month2 != "Jun")%>% 
+  ggplot()+ 
+  #Plot the graph, first a geom_jitter layer with light coloured points for individual respondents EU attitudes each month. Also note: The 'text' field is included for the hover text in the eventual ggplotly output.
+  geom_jitter(data = READERS2, width = .2, show.legend = TRUE, mapping = aes(x = month2, y = wave_mean, colour = PAPER, alpha = .05, text = paste("</br> Newspaper: ", PAPER, "</br> Inidividuals attitude: ", round(wave_mean, digits = 2), "</br> Month:", month2, "</br> Month:", date)))+
+  #Next plot points for each newspapers' readers (overall) average attitudes by month
+   geom_point(show.legend = FALSE, mapping = aes(x = month2, y = mean_RESP_month, colour = PAPER, group = PAPER, text = paste("</br> Newspaper: ", PAPER, "</br> Readers average EU attitudes: ", round(mean_RESP_month, digits = 2))))+
+  #Add a line for the points, to show their relationship
+   geom_line(show.legend = FALSE, size = 1, mapping = aes(x = month2, y = mean_RESP_month, colour = PAPER, group = PAPER, linetype = "Readers"))+
+  #Plot points for the EU attitudes/sentiment present within newspaper articles on average, by month
+  geom_point(show.legend = FALSE, mapping = aes(x = month2, y = mean_NP_month, colour = PAPER,  group = PAPER, text = paste("</br> Newspaper: ", PAPER, "</br> Newspapers average EU attitudes: ", round(mean_NP_month, digits = 2))))+
+  #Add a line to show their relationship
+    geom_line(show.legend = FALSE, size = 1, mapping = aes(x = month2, y = mean_NP_month, colour = PAPER, group = PAPER, linetype = "Newspapers"))+
+  #Labels for the x axis
+ scale_x_discrete(name = FALSE, labels = c("March 2014", "April 2014", "May 2014"))+ 
+  #Labels for Y - decision made to name '6' as it shows direction of attitudes scale, '7' was not possible to name as above max. Rather than assigning numeric values, these anchors are informative enough and require little further interpretation from the reader as their order shows the direction of scores.
+  scale_y_continuous(name = FALSE, breaks = c(1, 3.5, 6), labels = c("Anti-EU  ", "Neutral", "Pro-EU"))+
+  #Differentiate between Newspapers and Readers attitudes lines by selecting different linetypes
+    scale_linetype_manual(values=c(Newspapers = "dashed", Readers = "solid"))+
+  #add a title
+  labs(title = "EU attitudes in the press and of their readers")+
+  theme(plot.title = element_text(hjust = 0.5, size = 12))+
+  #Theme, and colours
+  theme_bw(base_size = 14) + scale_colour_hc()
+
+#Finally, use the ggplotly() function for the final, interactive graph:
+ggplotly(READERS, tooltip = c("text", width = 1200, height = 900)) %>% #Select to use the 'text' in the aes settings of above ggplot geoms as the hover text in ggplotly output. 
+  layout(showlegend = FALSE) #Hide legend - not optimal, however ggplotly known issue with legend display based on ggplots.
+  
+
+```
