@@ -308,3 +308,74 @@ PVV50 <- CA %>% #@@Ask whether we have to totally redo this table or not.
   
 ```
 
+```{r}
+#Creating a new object MAT with the Wavevalue variable, indicating in which Wave the observation was collected for each case.
+MAT <- ESSclean %>%
+  select(Wavevalue) 
+#Using the stripper function in order to treat data about anti-immigration attitudes as numeric and be able to use only the numerical number from the observations (E.g. '1 helemaal mee eens' becomes 1).
+
+stripper <- function(string){ 
+  str_extract(string, "\\-*\\d+\\.*\\d*")
+}
+#Adding columns for the anti-immigration attitudes as umeric and then recode them as 1 when the attitudes is 5 or higher towards a negative attitude.
+MAT <- MAT%>%
+  mutate(antiimm1 = as.numeric(stripper(w1_q42_1))) %>%
+  mutate(antiimm2 = as.numeric(stripper(w1_q42_2))) %>%
+  mutate(antiimm3 = as.numeric(stripper(w1_q42_3))) %>%
+  mutate(antiimm4 = as.numeric(stripper(w1_q42_4))) %>%
+   mutate(antiimm5 = as.numeric(stripper(w2_q39_1 ))) %>%
+   mutate(antiimm6 = as.numeric(stripper(w2_q39_2))) %>%
+   mutate(antiimm7 = as.numeric(stripper(w2_q39_3))) %>%
+  mutate(antiimm8 = as.numeric(stripper(w2_q39_4))) %>%
+  mutate(antiimm1 =ifelse(antiimm1 < 4, 1, 0)) %>%
+  mutate(antiimm2 =ifelse(antiimm2 < 4, 1, 0)) %>%
+  mutate(antiimm3 =ifelse(antiimm3 > 4, 1, 0)) %>%
+  mutate(antiimm4 =ifelse(antiimm4 < 4, 1, 0)) %>%
+  mutate(antiimm5 =ifelse(antiimm5 < 4, 1, 0)) %>%
+  mutate(antiimm6 =ifelse(antiimm6 < 4, 1, 0)) %>%
+  mutate(antiimm7 =ifelse(antiimm7 > 4, 1, 0)) %>%
+  mutate(antiimm8 =ifelse(antiimm8 < 4, 1, 0))
+
+
+#Adding the variables for political knowledge to the object MAT, recoding them as 1 (for a correct answer) and 0 (for an uncorrect one)
+MAT <- ESSclean %>%
+mutate(Plknowl1_1 = ifelse(PolKnowl1 == "Frans Timmermans", 1, 0)) %>%
+mutate(Plknowl1_2 = ifelse(PolKnowl2 == "4 jaar", 1, 0)) %>%
+mutate(Plknowl1_3 = ifelse(PolKnowl3 == 26 , 1, 0)) %>%
+mutate(Plknowl1_4 = ifelse(PolKnowl4 == 28, 1, 0)) %>%
+mutate(Plknowl1_5 = ifelse(PolKnowl5 == "Martin Schulz", 1, 0)) 
+
+#Creating variables "PoliticalKnowledge" and "AntiImmigrationLevel" computing the means of the scores from the questions about anti-immigrant attitudes and political knowledge. Political knowledge has already been recoded in order to be relating to the cases by view (PoKnowl1 is displaying values for wave 1, PolKnowl2 for wave 2 etc.)
+MAT$PoliticalKnowledge <- rowMeans(subset(MAT, select = c(Plknowl1_1, Plknowl1_2, Plknowl1_3, Plknowl1_4, Plknowl1_5)), na.rm = TRUE)
+
+MAT$AntiImmigrationLevel <- rowMeans(subset(MAT, select = c(antiimm1, antiimm2, antiimm3, antiimm4, antiimm5, antiimm6, antiimm7, antiimm8)), na.rm = TRUE)
+
+
+#Creating a dataframe with the three variables of interest
+MAT2 <-  MAT %>%
+  select(AntiImmigrationLevel, PoliticalKnowledge, Wavevalue)
+
+#Installing plotly and uploading plotly and tidyverse
+install.packages("plotly")
+library(plotly)
+library(tidyverse)
+
+#Filtering by the first two waves, since anti-immigrant attitudes were only calculated during the 1st and 2nd wave.
+MAT2 <- MAT2 %>%
+  filter(Wavevalue == 1 | Wavevalue == 2)
+
+#Creating a plot with the geom_bin
+p <- ggplot(data = MAT2, aes(x = PoliticalKnowledge, y = AntiImmigrationLevel)) +
+  geom_bin2d(bins =6, color = "white") +
+  scale_fill_gradient(low = "#00AFBB", high = "#FC4E07")+
+  theme_minimal()  + facet_wrap(~Wavevalue)
+
+#Displaying the plot
+p <- ggplotly(p)
+p
+
+
+
+
+```
+
