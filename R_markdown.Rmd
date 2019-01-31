@@ -1,8 +1,10 @@
 ---
-title: 'European Election Campaign Study 2014'
-author: Katerin Kunfermann (), Haylee Kelsall (11665424), Louelle Pesurnaij (10750886), Matteo Rinaldi ()
+title: "European Election Campaign Study 2014"
+author: Katerin Kunfermann (), Haylee Kelsall (11665424), Louelle Pesurnaij (10750886),
+  Matteo Rinaldi ()
 date: "31 January 2019"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
@@ -31,7 +33,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-```{r import survey data and access packages}
+```{r import survey data and access packages, include=FALSE}
 library(tidyverse) #access tidyverse
 library(lubridate) #lubridate (@@remove this if we don't actually use it in the end)
 #@@add other additional packages needed here - e.g. for interactive plots etc. 
@@ -82,7 +84,7 @@ RESP_DEMOG$W3_Q56_CONDITION <- ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_1), 1,
 ```
 
 
-```{r Spread the waveeeeees}
+```{r Spread the waveeeeees, include=FALSE}
 #select relevant variables for all waves
 ESSclean <- select(ESS, -c(INTNR, SAMPLE,	GEWICHTA1_w1,	GEWICHTA1_w2,	GEWICHTA1_w3,	GEWICHTA1_w4,	GSL,	LFT,	OPLA,	NIELSENCBS,	GEZINSGROOTTE,	POL2012, w1_q5_1, w1_q5_2, w1_q5_3, w1_q5_4, w1_q17_1, w1_q17_2, w1_q17_3, w1_q17_4, w1_q23, w1_q24_1, w1_q24_2, w1_q24_3, w1_q29, w1_q30_1,w1_q30_2,	w1_q30_3,	w1_q30_4,	w1_q30_5,	w1_q30_6,	w1_q30_7,	w1_q30_8,	w1_q30_9,	w1_q30_10,	w1_q30_11, w1_q31_1,	w1_q31_2,	w1_q31_3,	w1_q31_4,	w1_q31_5,	w1_q31_6,	w1_q31_7,	w1_q31_8,	w1_q31_9,	w1_q32_1,	w1_q32_2,	w1_q32_3,	w1_q32_4, w1_q57_1,	w1_q57_2,	w1_q57_3,	w1_q57_4,	w1_q57_5,	w1_q57_6,	w1_q57_7,	w1_q57_8,	w1_q58_1,	w1_q58_2,	w1_q58_3,	w1_q58_4,	w1_q58_5,	w1_q58_6,	w1_q58_7,	w1_q58_8,	w1_q58_9,	w1_q58_10,	w1_q59,	w1_q60,	w1_q61,	w1_q62,	w1_q64,	w1_q65,	w1_q66,	w1_q67,	w1_q68,	w1_q68_YES, w2_q25,	w2_q26_1,	w2_q26_2,	w2_q26_3,	w2_q26_4,	w2_q26_5,	w2_q26_6,	w2_q26_7,	w2_q26_8,	w2_q26_9,	w2_q26_10,	w2_q26_11,	w2_q27_1,	w2_q27_2,	w2_q27_3,	w2_q27_4,	w2_q27_5,	w2_q27_6,	w2_q27_7,	w2_q27_8,	w2_q27_9,	w2_q28_1,	w2_q28_2,	w2_q28_3,	w2_q28_4,	w2_q28_5,	w2_q28_6,	w2_q28_7,	w2_q28_8,	w2_q28_9,	w2_q28_10,	w2_q28_11,	w2_q29,	w2_q30,	w2_q30_OTHER_LOCAL,	w2_q30_OTHER,	w2_q31,	w2_q32_1,	w2_q32_2,	w2_q32_3,	w2_q32_4,	w2_q32_5,	w2_q32_OTHER,	w2_q33_1,	w2_q33_2,	w2_q33_3,	w2_q33_4,	w2_q33_5,	w2_q33_6,	w2_q33_7,	w2_q33_8,	w2_q33_9,	w2_q33_10,	w2_q33_11,	w2_q33_12,	w2_q33_13,	w2_q33_14,	w2_q33_OTHER_LOCAL,	w2_q33_OTHER,	w2_q50_1,	w2_q50_2,	w2_q50_3,	w2_q50_4,	w2_q50_5,	w2_q50_6,	w2_q51,	w2_q52_1,	w2_q52_2,	w2_q52_3,	w2_q52_4,	w2_q52_5,	w2_q53_1,	w2_q53_2,	w2_q54,	w2_q55,	w2_q56_1,	w2_q56_2,	w2_q56_3,	w2_q56_4, w2_q61_1,	w2_q61_2,	w2_q62_CONDITION1,	w2_q62_CONDITION2, w2_q63,	w2_q65, w3_q49TRUE_1,	w3_q49TRUE_2,	w3_q49TRUE_3,	w3_q49TRUE_4,	w3_q49TRUE_5,	w3_q49TRUE_6,	w3_q49TRUE_7,	w3_q49_1,	w3_q49_2,	w3_q49_3,	w3_q49_4,	w3_q49_5,	w3_q49_6,	w3_q49_7, w3_q56_CONDITION1_1,	w3_q56_CONDITION1_2,	w3_q56_CONDITION1_3,	w3_q56_CONDITION1_4,	w3_q56_CONDITION2_1,	w3_q56_CONDITION2_2,	w3_q56_CONDITION2_3,	w3_q56_CONDITION2_4,	w3_q56_TIMESTAMP, w3_q59_1,	w3_q59_2,	w3_q59_3,	w3_q60_1,	w3_q60_2,	w3_q60_3,	w3_q60_4, w4_q7,	w4_q8,	w4_q9, w4_q27, w4_q41_1,	w4_q41_2,	w4_q41_3,	w4_q41_4,	w4_q41_5,	w4_q41_6,	w4_q41_7,	w4_q41_8,	w4_q41_9,	w4_q41_10,	w4_q41_11, w4_q41_12,  w4_q43_1,	w4_q43_2,	w4_q43_3,	w4_q43_4,	w4_q43_5,	w4_q43_6,	w4_q43_7,	w4_q43_8,	w4_q43_9,	w4_q43_10,	w4_q43_11,	w4_q43_12, w4_q51_1,	w4_q51_2,	w4_q51_3,	w4_q51_4,	w4_q51_5,	w4_q51_OTHER,	w4_q52_1,	w4_q52_2,	w4_q52_3,	w4_q52_4,	w4_q52_5,	w4_q52_6,	w4_q52_7,	w4_q52_8,	w4_q52_9,	w4_q52_10,	w4_q52_11,	w4_q52_12,	w4_q52_13,	w4_q52_OTHER, w4_q57, w4_q62_1,	w4_q62_2,	w4_q62_3,	w4_q62_4,	w4_q62_5,	w4_q62_6,	w4_q62_7, wave1, wave2, wave3, wave4))
 
@@ -111,7 +113,7 @@ ESSclean$date <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_DATUM, ifelse(ESScl
 ESSclean <- transform(ESSclean, date = as.Date(as.character(date), "%Y%m%d"))
 ```
 
-```{r - CA tidying chunk}
+```{r - CA tidying chunk, include=TRUE, results="hide", echo=FALSE}
 
 library(lubridate)
 
@@ -274,7 +276,7 @@ filter(date >= as.Date("2014-04-17")) #and include cases only after filtered dat
 
 ```
 
-```{r}
+```{r include=FALSE}
 #Creating a table for the PVV 50PLUS articles. 
 #NOTE: This table @@was not further tidied as tidying would be similar to what was demonstrated with the MUS/POLE table above.
 #Therefore, variables required by group members for their own analyses were tidied as required, rather than restructuring this entire table. 
@@ -290,7 +292,7 @@ PVV50 <- CA %>% #@@Ask whether we have to totally redo this table or not.
   
 ```
 
-```{r Louelle Pesurnaij, echo=FALSE}
+```{r Louelle Pesurnaij, echo = FALSE, message = FALSE, warning = FALSE}
 #Create tables with variables for Louelle's visualization
 Louelle_ESS <- ESSclean %>% select(RESPNR, Wavevalue, date, w1_q10_1, w1_q10_2, w1_q10_3,w1_q10_4, w2_q7_1, w2_q7_2, w2_q7_3, w2_q7_4, w3_q11_1, w3_q11_2, w3_q11_3, w3_q11_4, w4_q13_1, w4_q13_2, w4_q13_3, w4_q13_4, w1_q49_1, w1_q49_2, w1_q50_1, w1_q50_2, w1_q50_6, w2_q44_1, w2_q44_2, w2_q45_1, w2_q45_2, w2_q45_6, w3_q43_1, w3_q43_2, w3_q44_1, w3_q44_2, w3_q44_6, w4_q47_1, w4_q47_2, w4_q48_1, w4_q48_2, w4_q48_6,w1_q51_2, w2_q46_2, w3_q45_2, w4_q49_2)
 Louelle_CA <- ALL_FIXED %>% select(date, V6Topic, V4)
@@ -423,8 +425,8 @@ p <- p + scale_y_continuous(limits = c(1, 7), breaks = c(1, 2, 3, 4, 5, 6, 7), s
 p <- p + theme_minimal(base_size = 11)
 p <- p + theme(legend.position = "bottom")
 p <- p + scale_colour_manual(name = " ", values = c("deep sky blue 4", "sky blue 2"))
-p <- p + annotate("text", x=as.Date("2014-05-22", "%Y-%m-%d"), y=5.5, label= "2014 EU election", size=3, angle=19)
-p <- p + annotate("text", x=as.Date("2014-03-10", "%Y-%m-%d"), y=6.7, label= "Local elections in EU Countries", size=3, angle=19)
+p <- p + annotate("text", x=as.Date("2014-05-22", "%Y-%m-%d"), y=5.5, label= "2014 EU election", size=2.5, angle=19)
+p <- p + annotate("text", x=as.Date("2014-03-10", "%Y-%m-%d"), y=6.7, label= "Local elections in EU Countries", size=2.5, angle=19)
 p <- p + geom_segment(aes(x = as.Date("2014-05-20", "%Y-%m-%d"), y=4.85, xend = as.Date("2014-05-20", "%Y-%m-%d"), yend = 5.25), size = 0.2, color = "deep sky blue 4", linetype = "dotted")
 p <- p + geom_segment(aes(x = as.Date("2014-03-17", "%Y-%m-%d"), y=6.25, xend = as.Date("2014-03-17", "%Y-%m-%d"), yend = 6.7), size = 0.3, color = "deep sky blue 4", linetype = "dotted")
 p <- p + geom_segment(aes(x = as.Date("2014-02-28", "%Y-%m-%d"), y=5.8, xend = as.Date("2014-02-28", "%Y-%m-%d"), yend = 6.2), size = 0.2, color = "deep sky blue 4", linetype = "dotted")
