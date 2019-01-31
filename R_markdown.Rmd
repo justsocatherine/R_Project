@@ -1,12 +1,12 @@
 ---
 title: "European Election Campaign Study 2014"
 author: Katerin Kunfermann (), Haylee Kelsall (11665424), Louelle Pesurnaij (10750886),
-  Matteo Rinaldi ()
+  Matteo Rinaldi (11580461)
 date: "31 January 2019"
 output:
-  pdf_document: default
   html_document:
     df_print: paged
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -34,11 +34,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 ```{r import survey data and access packages, include=FALSE, message = FALSE, warning = FALSE}
+
 library(tidyverse) #access tidyverse
 library(lubridate) #lubridate
-library(plyr) 
 library(plotly)
 library(ggthemes)
+
 
 
 #Stripper function used in our data work, in order to strip out numerical values from strings.
@@ -46,6 +47,7 @@ library(ggthemes)
 stripper <- function(string){ 
   str_extract(string, "\\-*\\d+\\.*\\d*")
 } 
+
 
 CA <- read_csv("Dataset MCA EPE 2014 NL FINAL.csv") #Read content analysis file, store under CA
 
@@ -56,12 +58,12 @@ ESS <- read_csv("All waves GENERAL.csv") # Read survey file, store under ESS (El
 #Examples of these: demographics, big 5 personality traits etc. Here the RESPONDENT is the unit. 
 #We also want to include here a column for the waves which the participant was in, we only have the 'GENERAL' panel data so not neccessary to create additional columns for other panels. 
 
-ESS %>%
-  summarise(n_RESPS = n_distinct(RESPNR)) #Check all respondent IDs unique. Respondent ID will be used as our primary key in this table.
+#ESS %>%
+ # summarise(n_RESPS = n_distinct(RESPNR)) #Check all respondent IDs unique. Respondent ID will be used as our primary key in this table.
 
 
 #tidy columns respondent ID and Waves
-ESS %>% count(WAVES) #First count the number of respondents participating in each level of 'WAVES'.
+#ESS %>% count(WAVES) #First count the number of respondents participating in each level of 'WAVES'.
 
 #Wave 1
 ESS$wave1 <- ifelse(ESS$WAVES == "All waves", 1, ifelse(ESS$WAVES == "Only wave 1", 1, ifelse(ESS$WAVES == "Wave 1 and 2", 1, ifelse(ESS$WAVES == "Wave 1, 2 and 3", 1, 0)))) 
@@ -120,11 +122,21 @@ ESSclean$date <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_DATUM, ifelse(ESScl
 
 # Change date-variable from character to actual date
 ESSclean <- transform(ESSclean, date = as.Date(as.character(date), "%Y%m%d"))
+
+#LOUELLES BRILJANT INNOVATIVE IDEA
+#Example: Create the variables for Political Knowledge (i.e. PolKnowl)
+ESSclean$PolKnowl1 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q18, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q14, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q19, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q21, NA)))) #Create PolKnowl1
+ESSclean$PolKnowl2 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q19, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q15, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q20, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q22, NA)))) #Create PolKnowl2
+ESSclean$PolKnowl3 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q20, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q16, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q21, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q23, NA)))) #Create PolKnowl3
+ESSclean$PolKnowl4 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q21, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q17, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q22, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q24, NA)))) #Create PolKnowl4
+ESSclean$PolKnowl5 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q22, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q18, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q23, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q25, NA)))) #Create PolKnowl5
+
+
 ```
 
-```{r - CA tidying chunk, include=FALSE, message = FALSE, warning = FALSE}
 
-library(lubridate)
+
+```{r - CA tidying chunk, include=FALSE, message = FALSE, warning = FALSE}
 
 #First parse date in original object so all latter tables will already have a 'date' column. (day = V3a, month = V3b, year = V3c).
 CA$date <- with(CA, dmy(sprintf('%02d%02d%02d', V3a, V3b, V3c))) #We checked in console the accuracy of our code and it returned the correct format.
@@ -284,10 +296,13 @@ filter(date >= as.Date("2014-04-17"))
 
 ```
 
-```{r include=FALSE, message = FALSE, warning = FALSE}
-#Since we noticed that many questions were repeated exactly the same for two parties (50PLUS and PVV), we decided to create a table for these articles. 
-#NOTE: This table was not further tidied as tidying would be similar to what was demonstrated with the MUS/POLE table above.
-#Therefore, variables required by group members for their own analyses were tidied as required, rather than restructuring this entire table. 
+
+
+```{r PVV50, include=FALSE, message = FALSE, warning = FALSE}
+
+#In the case of the following table, identical items were coded for PVV and 50 PLUS. Therefore, the unit would be the article and either PVV and/or 50PLUS. Although we did not tidy this table as the structure is similar to others (and it was not used by any of the group for their resulting graphs), had we tidied it, we would first have needed to create new rows for each observation, where an observation consisted of the article, and its PVV or 50PLUS item answers. The identical items would be then merged in a similar fashion to we have done with the MUS/POL table and the PolKnow example.  
+
+#Note however - variables required by group members for their own analyses were tidied as required, rather than restructuring unused tables such as this.  
  
 
 PVV50 <- CA %>% 
@@ -304,7 +319,8 @@ PVV50 <- CA %>%
 ## Louelle Pesurnaij
 ```{r Louelle Pesurnaij, echo = FALSE, message = FALSE, warning = FALSE}
 #Create tables with variables for Louelle's visualization
-Louelle_ESS <- ESSclean %>% select(RESPNR, Wavevalue, date, w1_q10_1, w1_q10_2, w1_q10_3,w1_q10_4, w2_q7_1, w2_q7_2, w2_q7_3, w2_q7_4, w3_q11_1, w3_q11_2, w3_q11_3, w3_q11_4, w4_q13_1, w4_q13_2, w4_q13_3, w4_q13_4, w1_q49_1, w1_q49_2, w1_q50_1, w1_q50_2, w1_q50_6, w2_q44_1, w2_q44_2, w2_q45_1, w2_q45_2, w2_q45_6, w3_q43_1, w3_q43_2, w3_q44_1, w3_q44_2, w3_q44_6, w4_q47_1, w4_q47_2, w4_q48_1, w4_q48_2, w4_q48_6,w1_q51_2, w2_q46_2, w3_q45_2, w4_q49_2)
+Louelle_ESS <- ESSclean %>% select(RESPNR, Wavevalue, date, w1_q10_1, w1_q10_2, w1_q10_3, w1_q10_4, w2_q7_1, w2_q7_2, w2_q7_3, w2_q7_4, w3_q11_1, w3_q11_2, w3_q11_3, w3_q11_4, w4_q13_1, w4_q13_2, w4_q13_3, w4_q13_4, w1_q49_1, w1_q49_2, w1_q50_1, w1_q50_2, w1_q50_6, w2_q44_1, w2_q44_2, w2_q45_1, w2_q45_2, w2_q45_6, w3_q43_1, w3_q43_2, w3_q44_1, w3_q44_2, w3_q44_6, w4_q47_1, w4_q47_2, w4_q48_1, w4_q48_2, w4_q48_6, w1_q51_2, w2_q46_2, w3_q45_2, w4_q49_2)
+
 Louelle_CA <- ALL_FIXED %>% select(date, V6Topic, V4)
 
 #Separate the Likert-scale numbers that measure Political Cynicism from the description (characters)
@@ -442,6 +458,7 @@ p <- p + geom_segment(aes(x = as.Date("2014-03-17", "%Y-%m-%d"), y=6.25, xend = 
 p <- p + geom_segment(aes(x = as.Date("2014-02-28", "%Y-%m-%d"), y=5.8, xend = as.Date("2014-02-28", "%Y-%m-%d"), yend = 6.2), size = 0.2, color = "deep sky blue 4", linetype = "dotted")
 p <- p + theme(panel.grid.minor = element_blank())
 p
+
 ```
 
 With the graph above, the relationship between Dutch media coverage (both newspaper, TV and online) and political cynicism amongst the public is shown. Both the amount of articles about elections and the (average) score on political cynicism (from 1 -totally disagree- to 7 -totally agree-) are plotted over time. 
@@ -452,16 +469,8 @@ When critically assessing the graph, some uncertainty problems arise. First of a
 
 ## Matteo Rinaldi
 ```{r Matteo Rinaldi, echo = FALSE, message = FALSE, warning = FALSE}
-#Creating a new object MAT with the Wavevalue variable, indicating in which Wave the observation was collected for each case.
+#Using the stripper function in order to treat data about anti-immigration attitudes as numeric and be able to use only the numerical number from the observations (E.g. '1 helemaal mee eens' becomes 1).Adding columns for the anti-immigration attitudes as umeric and then recode them as 1 when the attitudes is 5 or higher towards a negative attitude.
 MAT <- ESSclean %>%
-  select(Wavevalue) 
-#Using the stripper function in order to treat data about anti-immigration attitudes as numeric and be able to use only the numerical number from the observations (E.g. '1 helemaal mee eens' becomes 1).
-
-stripper <- function(string){ 
-  str_extract(string, "\\-*\\d+\\.*\\d*")
-}
-#Adding columns for the anti-immigration attitudes as umeric and then recode them as 1 when the attitudes is 5 or higher towards a negative attitude.
-MAT <- MAT%>%
   mutate(antiimm1 = as.numeric(stripper(w1_q42_1))) %>%
   mutate(antiimm2 = as.numeric(stripper(w1_q42_2))) %>%
   mutate(antiimm3 = as.numeric(stripper(w1_q42_3))) %>%
@@ -477,11 +486,11 @@ MAT <- MAT%>%
   mutate(antiimm5 =ifelse(antiimm5 < 4, 1, 0)) %>%
   mutate(antiimm6 =ifelse(antiimm6 < 4, 1, 0)) %>%
   mutate(antiimm7 =ifelse(antiimm7 > 4, 1, 0)) %>%
-  mutate(antiimm8 =ifelse(antiimm8 < 4, 1, 0))
+  mutate(antiimm8 =ifelse(antiimm8 < 4, 1, 0))%>%
 
 
 #Adding the variables for political knowledge to the object MAT, recoding them as 1 (for a correct answer) and 0 (for an uncorrect one)
-MAT <- ESSclean %>%
+
 mutate(Plknowl1_1 = ifelse(PolKnowl1 == "Frans Timmermans", 1, 0)) %>%
 mutate(Plknowl1_2 = ifelse(PolKnowl2 == "4 jaar", 1, 0)) %>%
 mutate(Plknowl1_3 = ifelse(PolKnowl3 == 26 , 1, 0)) %>%
@@ -497,11 +506,6 @@ MAT$AntiImmigrationLevel <- rowMeans(subset(MAT, select = c(antiimm1, antiimm2, 
 #Creating a dataframe with the three variables of interest
 MAT2 <-  MAT %>%
   select(AntiImmigrationLevel, PoliticalKnowledge, Wavevalue)
-
-#Installing plotly and uploading plotly and tidyverse
-install.packages("plotly")
-library(plotly)
-library(tidyverse)
 
 #Filtering by the first two waves, since anti-immigrant attitudes were only calculated during the 1st and 2nd wave.
 MAT2 <- MAT2 %>%
@@ -522,6 +526,13 @@ In this graphical representation I am using the data from the survey conducted b
 I then created two new variables which are the mean of these results for each participant. 
 I proceeded displaying how the interaction took place with a visualization with ggplot. Interestingly, it seems like the people knowing average about politics (in the centre of the 2d table) are the ones having both the most extreme and most tolerant attitudes towards immigrants. The situation did not changed with the second wave. Finally, as expected, people low in political interest, or with an amount below the 50% of right scores, are the ones that scored lower on anti-immigrant attitudes, showing then lower tolerance and levels of acceptace of immigrants in the country and in the Dutch culture. 
 
+
+
+<center> <h1> Do readers reflect the attitudes of their daily newspaper? </h1> </center>
+<center> <h3> __Dutch newspapers, their readers, and their European attitudes__ </h3> </center>
+
+In 1972, McCombs and Shaw published their seminal article, _"The agenda-setting function of mass media"_. They argued that mass media - through their ability to increase the salience of a given issue in the public eye - are able to set the public's agenda. In 1984, Entman introduced _"Framing"_, which extended agenda-setting by highlighting that the press, by selecting _particluar_ aspects of an issue, promte a particular understanding, evaluation or course of action with regards the given issue. Can we see this in the case of Dutch newspaper readers reflecting similar European attitudes to those which are presented in the daily paper which they read? 
+The interactive graph below plots the mean monthly EU-attitudes score of readers versus the EU-attitudes presented in the newspaper they read (either de Telegraaf, NRC Handelsblad or de Volkskraant). The individual dots represent unique readers' EU-attitudes by month - an average score based on 18 items. Interestingly, individuals consistently held more pro-European attitudes than the newspapers they read, and for each newspaper, we see individual cases which deviate from the rest of the group, such as the two lone Telegraaf readers in March with _very_ pro-EU attitudes. Unfortunately it is difficult to conclude whether indeed reader attitudes are influenced by those in the press, or whether it is that readers opt for news outlets which reflect their pre-existing beliefs. However, the slopes of the lines do suggest there may be a pattern between reader attitudes and those in their respective paper, and looking at this over a longer period may provide confirmation that indeed such a relationship exists. For now however what is clear is that in the Netherlands, citizens' appear to be far more supportive of the European Project than the daily newspapers which they read. 
 
 
 ```{r Haylee chunk, ECHO = FALSE}
