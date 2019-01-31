@@ -441,3 +441,73 @@ With the graph above, the relationship between Dutch media coverage (both newspa
 The graph shows that the amount of Dutch articles obout the 2014 EU Elections does not have a direct influence on political cynicism amongst the public. The average score on political cynicism stays somewhat fixed over time.
 
 When critically assessing the graph, some uncertainty problems arise. First of all, political cynicism has only been measured in the four-wave panel survey. Thus, between the four waves (represented in the graph by the grouped dots) political cynicism is not measured and therefore it cannot be concluded with full confidence that (the score on) political cynicism has not changed over time. Besides, the content and sentiment of the news articles about elections is not taken into account within this analysis and it remains unclear whether the survey-respondets were actually exposed to the media content about elections or not. These two factors might play an important (moderating) role in the influence of media coverage on political cynicism. In future research, these factors should be taken into account.
+
+## Matteo Rinaldi
+```{r Matteo Rinaldi, echo = FALSE, message = FALSE, warning = FALSE}
+#Creating a new object MAT with the Wavevalue variable, indicating in which Wave the observation was collected for each case.
+MAT <- ESSclean %>%
+  select(Wavevalue) 
+#Using the stripper function in order to treat data about anti-immigration attitudes as numeric and be able to use only the numerical number from the observations (E.g. '1 helemaal mee eens' becomes 1).
+
+stripper <- function(string){ 
+  str_extract(string, "\\-*\\d+\\.*\\d*")
+}
+#Adding columns for the anti-immigration attitudes as umeric and then recode them as 1 when the attitudes is 5 or higher towards a negative attitude.
+MAT <- MAT%>%
+  mutate(antiimm1 = as.numeric(stripper(w1_q42_1))) %>%
+  mutate(antiimm2 = as.numeric(stripper(w1_q42_2))) %>%
+  mutate(antiimm3 = as.numeric(stripper(w1_q42_3))) %>%
+  mutate(antiimm4 = as.numeric(stripper(w1_q42_4))) %>%
+   mutate(antiimm5 = as.numeric(stripper(w2_q39_1 ))) %>%
+   mutate(antiimm6 = as.numeric(stripper(w2_q39_2))) %>%
+   mutate(antiimm7 = as.numeric(stripper(w2_q39_3))) %>%
+  mutate(antiimm8 = as.numeric(stripper(w2_q39_4))) %>%
+  mutate(antiimm1 =ifelse(antiimm1 < 4, 1, 0)) %>%
+  mutate(antiimm2 =ifelse(antiimm2 < 4, 1, 0)) %>%
+  mutate(antiimm3 =ifelse(antiimm3 > 4, 1, 0)) %>%
+  mutate(antiimm4 =ifelse(antiimm4 < 4, 1, 0)) %>%
+  mutate(antiimm5 =ifelse(antiimm5 < 4, 1, 0)) %>%
+  mutate(antiimm6 =ifelse(antiimm6 < 4, 1, 0)) %>%
+  mutate(antiimm7 =ifelse(antiimm7 > 4, 1, 0)) %>%
+  mutate(antiimm8 =ifelse(antiimm8 < 4, 1, 0))
+
+
+#Adding the variables for political knowledge to the object MAT, recoding them as 1 (for a correct answer) and 0 (for an uncorrect one)
+MAT <- ESSclean %>%
+mutate(Plknowl1_1 = ifelse(PolKnowl1 == "Frans Timmermans", 1, 0)) %>%
+mutate(Plknowl1_2 = ifelse(PolKnowl2 == "4 jaar", 1, 0)) %>%
+mutate(Plknowl1_3 = ifelse(PolKnowl3 == 26 , 1, 0)) %>%
+mutate(Plknowl1_4 = ifelse(PolKnowl4 == 28, 1, 0)) %>%
+mutate(Plknowl1_5 = ifelse(PolKnowl5 == "Martin Schulz", 1, 0)) 
+
+#Creating variables "PoliticalKnowledge" and "AntiImmigrationLevel" computing the means of the scores from the questions about anti-immigrant attitudes and political knowledge. Political knowledge has already been recoded in order to be relating to the cases by view (PoKnowl1 is displaying values for wave 1, PolKnowl2 for wave 2 etc.)
+MAT$PoliticalKnowledge <- rowMeans(subset(MAT, select = c(Plknowl1_1, Plknowl1_2, Plknowl1_3, Plknowl1_4, Plknowl1_5)), na.rm = TRUE)
+
+MAT$AntiImmigrationLevel <- rowMeans(subset(MAT, select = c(antiimm1, antiimm2, antiimm3, antiimm4, antiimm5, antiimm6, antiimm7, antiimm8)), na.rm = TRUE)
+
+
+#Creating a dataframe with the three variables of interest
+MAT2 <-  MAT %>%
+  select(AntiImmigrationLevel, PoliticalKnowledge, Wavevalue)
+
+#Installing plotly and uploading plotly and tidyverse
+install.packages("plotly")
+library(plotly)
+library(tidyverse)
+
+#Filtering by the first two waves, since anti-immigrant attitudes were only calculated during the 1st and 2nd wave.
+MAT2 <- MAT2 %>%
+  filter(Wavevalue == 1 | Wavevalue == 2)
+
+#Creating a plot with the geom_bin
+p <- ggplot(data = MAT2, aes(x = PoliticalKnowledge, y = AntiImmigrationLevel)) +
+  geom_bin2d(bins =6, color = "white") +
+  scale_fill_gradient(low = "#00AFBB", high = "#FC4E07")+
+  theme_minimal()  + facet_wrap(~Wavevalue)
+
+#Displaying the plot
+p <- ggplotly(p)
+p
+```
+
+In this graphical representation I am using the data from the survey conducted between December 2013 and May 2014 about the attitudes and intentions of citizens towards the European Union. I decided to analyse the interaction between the political knowledge of the surveyd sample and their attitudes towards immigration. I was expecting this relation to be negative: the more one knows about politics and its complexity, the more should be aware that immigration is a complex process and that immigrants are not to blame for the core of the problem itself. I conducted the analysis by recoding the measurement for political knowledge as a dummy variable (right/wrong, coded as 1/0) and by recoding the variables measuring anti-immigrant attitudes by deciding that cases scoring higher or equal to 5 (on a 1 - 7 Likert scale) had to be considered like having a negative attitude toward immigrants, scoring then with a 1. I then created two new variables which are the mean of these results for each participant. I proceeded displaying how the interaction took place with a visualization with ggplot. Interestingly, it seems like the people knowing average about politics (in the centre of the 2d table) are the ones having both the most extreme and most tolerant attitudes towards immigrants. The situation did not changed with the second wave.
