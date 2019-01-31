@@ -1,8 +1,12 @@
 ---
-title: "@@Add title"
-author: "Katerin Kunfermann, Haylee Kelsall 11665424, 12225223@@@@add names, Student numbers etc"
-date: "17 January 2019"
-output: pdf_document
+title: "European Election Campaign Study 2014"
+author: Katerin Kunfermann (), Haylee Kelsall (11665424), Louelle Pesurnaij (10750886),
+  Matteo Rinaldi ()
+date: "31 January 2019"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
@@ -29,7 +33,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-```{r import survey data and access packages}
+```{r import survey data and access packages, include=FALSE, message = FALSE, warning = FALSE}
 library(tidyverse) #access tidyverse
 library(lubridate) #lubridate (@@remove this if we don't actually use it in the end)
 #@@add other additional packages needed here - e.g. for interactive plots etc. 
@@ -80,13 +84,7 @@ RESP_DEMOG$W3_Q56_CONDITION <- ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_1), 1,
 ```
 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-
-
-```{r Spread the waveeeeees}
+```{r Spread the waveeeeees, include=FALSE, message = FALSE, warning = FALSE}
 #select relevant variables for all waves
 ESSclean <- select(ESS, -c(INTNR, SAMPLE,	GEWICHTA1_w1,	GEWICHTA1_w2,	GEWICHTA1_w3,	GEWICHTA1_w4,	GSL,	LFT,	OPLA,	NIELSENCBS,	GEZINSGROOTTE,	POL2012, w1_q5_1, w1_q5_2, w1_q5_3, w1_q5_4, w1_q17_1, w1_q17_2, w1_q17_3, w1_q17_4, w1_q23, w1_q24_1, w1_q24_2, w1_q24_3, w1_q29, w1_q30_1,w1_q30_2,	w1_q30_3,	w1_q30_4,	w1_q30_5,	w1_q30_6,	w1_q30_7,	w1_q30_8,	w1_q30_9,	w1_q30_10,	w1_q30_11, w1_q31_1,	w1_q31_2,	w1_q31_3,	w1_q31_4,	w1_q31_5,	w1_q31_6,	w1_q31_7,	w1_q31_8,	w1_q31_9,	w1_q32_1,	w1_q32_2,	w1_q32_3,	w1_q32_4, w1_q57_1,	w1_q57_2,	w1_q57_3,	w1_q57_4,	w1_q57_5,	w1_q57_6,	w1_q57_7,	w1_q57_8,	w1_q58_1,	w1_q58_2,	w1_q58_3,	w1_q58_4,	w1_q58_5,	w1_q58_6,	w1_q58_7,	w1_q58_8,	w1_q58_9,	w1_q58_10,	w1_q59,	w1_q60,	w1_q61,	w1_q62,	w1_q64,	w1_q65,	w1_q66,	w1_q67,	w1_q68,	w1_q68_YES, w2_q25,	w2_q26_1,	w2_q26_2,	w2_q26_3,	w2_q26_4,	w2_q26_5,	w2_q26_6,	w2_q26_7,	w2_q26_8,	w2_q26_9,	w2_q26_10,	w2_q26_11,	w2_q27_1,	w2_q27_2,	w2_q27_3,	w2_q27_4,	w2_q27_5,	w2_q27_6,	w2_q27_7,	w2_q27_8,	w2_q27_9,	w2_q28_1,	w2_q28_2,	w2_q28_3,	w2_q28_4,	w2_q28_5,	w2_q28_6,	w2_q28_7,	w2_q28_8,	w2_q28_9,	w2_q28_10,	w2_q28_11,	w2_q29,	w2_q30,	w2_q30_OTHER_LOCAL,	w2_q30_OTHER,	w2_q31,	w2_q32_1,	w2_q32_2,	w2_q32_3,	w2_q32_4,	w2_q32_5,	w2_q32_OTHER,	w2_q33_1,	w2_q33_2,	w2_q33_3,	w2_q33_4,	w2_q33_5,	w2_q33_6,	w2_q33_7,	w2_q33_8,	w2_q33_9,	w2_q33_10,	w2_q33_11,	w2_q33_12,	w2_q33_13,	w2_q33_14,	w2_q33_OTHER_LOCAL,	w2_q33_OTHER,	w2_q50_1,	w2_q50_2,	w2_q50_3,	w2_q50_4,	w2_q50_5,	w2_q50_6,	w2_q51,	w2_q52_1,	w2_q52_2,	w2_q52_3,	w2_q52_4,	w2_q52_5,	w2_q53_1,	w2_q53_2,	w2_q54,	w2_q55,	w2_q56_1,	w2_q56_2,	w2_q56_3,	w2_q56_4, w2_q61_1,	w2_q61_2,	w2_q62_CONDITION1,	w2_q62_CONDITION2, w2_q63,	w2_q65, w3_q49TRUE_1,	w3_q49TRUE_2,	w3_q49TRUE_3,	w3_q49TRUE_4,	w3_q49TRUE_5,	w3_q49TRUE_6,	w3_q49TRUE_7,	w3_q49_1,	w3_q49_2,	w3_q49_3,	w3_q49_4,	w3_q49_5,	w3_q49_6,	w3_q49_7, w3_q56_CONDITION1_1,	w3_q56_CONDITION1_2,	w3_q56_CONDITION1_3,	w3_q56_CONDITION1_4,	w3_q56_CONDITION2_1,	w3_q56_CONDITION2_2,	w3_q56_CONDITION2_3,	w3_q56_CONDITION2_4,	w3_q56_TIMESTAMP, w3_q59_1,	w3_q59_2,	w3_q59_3,	w3_q60_1,	w3_q60_2,	w3_q60_3,	w3_q60_4, w4_q7,	w4_q8,	w4_q9, w4_q27, w4_q41_1,	w4_q41_2,	w4_q41_3,	w4_q41_4,	w4_q41_5,	w4_q41_6,	w4_q41_7,	w4_q41_8,	w4_q41_9,	w4_q41_10,	w4_q41_11, w4_q41_12,  w4_q43_1,	w4_q43_2,	w4_q43_3,	w4_q43_4,	w4_q43_5,	w4_q43_6,	w4_q43_7,	w4_q43_8,	w4_q43_9,	w4_q43_10,	w4_q43_11,	w4_q43_12, w4_q51_1,	w4_q51_2,	w4_q51_3,	w4_q51_4,	w4_q51_5,	w4_q51_OTHER,	w4_q52_1,	w4_q52_2,	w4_q52_3,	w4_q52_4,	w4_q52_5,	w4_q52_6,	w4_q52_7,	w4_q52_8,	w4_q52_9,	w4_q52_10,	w4_q52_11,	w4_q52_12,	w4_q52_13,	w4_q52_OTHER, w4_q57, w4_q62_1,	w4_q62_2,	w4_q62_3,	w4_q62_4,	w4_q62_5,	w4_q62_6,	w4_q62_7, wave1, wave2, wave3, wave4))
 
@@ -113,23 +111,9 @@ ESSclean$date <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_DATUM, ifelse(ESScl
 
 # Change date-variable from character to actual date
 ESSclean <- transform(ESSclean, date = as.Date(as.character(date), "%Y%m%d"))
-
-#LOUELLES BRILJANT INNOVATIVE IDEA
-#Example: Create the variables for Political Knowledge (i.e. PolKnowl)
-ESSclean$PolKnowl1 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q18, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q14, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q19, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q21, NA)))) #Create PolKnowl1
-ESSclean$PolKnowl2 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q19, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q15, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q20, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q22, NA)))) #Create PolKnowl2
-ESSclean$PolKnowl3 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q20, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q16, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q21, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q23, NA)))) #Create PolKnowl3
-ESSclean$PolKnowl4 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q21, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q17, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q22, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q24, NA)))) #Create PolKnowl4
-ESSclean$PolKnowl5 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q22, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q18, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q23, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q25, NA)))) #Create PolKnowl5
-
-#PROOF THAT IT WORKS ( Example is a very indecisive respondent)
-ESSclean %>% select(RESPNR, Wavevalue, w1_q18, w2_q14, w3_q19, w4_q21) %>% filter(RESPNR == 30016148	)
-ESSclean %>% select(RESPNR, Wavevalue, PolKnowl1) %>% filter(RESPNR == 30016148	)
-
-
 ```
 
-```{r - CA tidying chunk}
+```{r - CA tidying chunk, include=FALSE, message = FALSE, warning = FALSE}
 
 library(lubridate)
 
@@ -292,7 +276,7 @@ filter(date >= as.Date("2014-04-17")) #and include cases only after filtered dat
 
 ```
 
-```{r}
+```{r include=FALSE, message = FALSE, warning = FALSE}
 #Creating a table for the PVV 50PLUS articles. 
 #NOTE: This table @@was not further tidied as tidying would be similar to what was demonstrated with the MUS/POLE table above.
 #Therefore, variables required by group members for their own analyses were tidied as required, rather than restructuring this entire table. 
@@ -308,74 +292,152 @@ PVV50 <- CA %>% #@@Ask whether we have to totally redo this table or not.
   
 ```
 
-```{r}
-#Creating a new object MAT with the Wavevalue variable, indicating in which Wave the observation was collected for each case.
-MAT <- ESSclean %>%
-  select(Wavevalue) 
-#Using the stripper function in order to treat data about anti-immigration attitudes as numeric and be able to use only the numerical number from the observations (E.g. '1 helemaal mee eens' becomes 1).
 
-stripper <- function(string){ 
-  str_extract(string, "\\-*\\d+\\.*\\d*")
-}
-#Adding columns for the anti-immigration attitudes as umeric and then recode them as 1 when the attitudes is 5 or higher towards a negative attitude.
-MAT <- MAT%>%
-  mutate(antiimm1 = as.numeric(stripper(w1_q42_1))) %>%
-  mutate(antiimm2 = as.numeric(stripper(w1_q42_2))) %>%
-  mutate(antiimm3 = as.numeric(stripper(w1_q42_3))) %>%
-  mutate(antiimm4 = as.numeric(stripper(w1_q42_4))) %>%
-   mutate(antiimm5 = as.numeric(stripper(w2_q39_1 ))) %>%
-   mutate(antiimm6 = as.numeric(stripper(w2_q39_2))) %>%
-   mutate(antiimm7 = as.numeric(stripper(w2_q39_3))) %>%
-  mutate(antiimm8 = as.numeric(stripper(w2_q39_4))) %>%
-  mutate(antiimm1 =ifelse(antiimm1 < 4, 1, 0)) %>%
-  mutate(antiimm2 =ifelse(antiimm2 < 4, 1, 0)) %>%
-  mutate(antiimm3 =ifelse(antiimm3 > 4, 1, 0)) %>%
-  mutate(antiimm4 =ifelse(antiimm4 < 4, 1, 0)) %>%
-  mutate(antiimm5 =ifelse(antiimm5 < 4, 1, 0)) %>%
-  mutate(antiimm6 =ifelse(antiimm6 < 4, 1, 0)) %>%
-  mutate(antiimm7 =ifelse(antiimm7 > 4, 1, 0)) %>%
-  mutate(antiimm8 =ifelse(antiimm8 < 4, 1, 0))
+## Louelle Pesurnaij
+```{r Louelle Pesurnaij, echo = FALSE, message = FALSE, warning = FALSE}
+#Create tables with variables for Louelle's visualization
+Louelle_ESS <- ESSclean %>% select(RESPNR, Wavevalue, date, w1_q10_1, w1_q10_2, w1_q10_3,w1_q10_4, w2_q7_1, w2_q7_2, w2_q7_3, w2_q7_4, w3_q11_1, w3_q11_2, w3_q11_3, w3_q11_4, w4_q13_1, w4_q13_2, w4_q13_3, w4_q13_4, w1_q49_1, w1_q49_2, w1_q50_1, w1_q50_2, w1_q50_6, w2_q44_1, w2_q44_2, w2_q45_1, w2_q45_2, w2_q45_6, w3_q43_1, w3_q43_2, w3_q44_1, w3_q44_2, w3_q44_6, w4_q47_1, w4_q47_2, w4_q48_1, w4_q48_2, w4_q48_6,w1_q51_2, w2_q46_2, w3_q45_2, w4_q49_2)
+Louelle_CA <- ALL_FIXED %>% select(date, V6Topic, V4)
 
+#Separate the Likert-scale numbers that measure Political Cynicism from the description (characters)
+Louelle_ESS <- separate(Louelle_ESS, w1_q10_1, into = c("w1_q10_1", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w1_q10_2, into = c("w1_q10_2", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w1_q10_3, into = c("w1_q10_3", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w1_q10_4, into = c("w1_q10_4", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q7_1, into = c("w2_q7_1", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q7_2, into = c("w2_q7_2", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q7_3, into = c("w2_q7_3", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q7_4, into = c("w2_q7_4", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q11_1, into = c("w3_q11_1", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q11_2, into = c("w3_q11_2", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q11_3, into = c("w3_q11_3", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q11_4, into = c("w3_q11_4", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q13_1, into = c("w4_q13_1", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q13_2, into = c("w4_q13_2", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q13_3, into = c("w4_q13_3", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q13_4, into = c("w4_q13_4", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w1_q49_1, into = c("W1Q491", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w1_q49_2, into = c("W1Q492", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w1_q50_1, into = c("W1Q501", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w1_q50_2, into = c("W1Q502", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w1_q50_6, into = c("W1Q506", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w1_q51_2, into = c("W1Q512", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q44_1, into = c("W2Q441", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q44_2, into = c("W2Q442", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q45_1, into = c("W2Q451", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q45_2, into = c("W2Q452", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q45_6, into = c("W2Q456", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w2_q46_2, into = c("W2Q462", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q43_1, into = c("W3Q431", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q43_2, into = c("W3Q432", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q44_1, into = c("W3Q441", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q44_2, into = c("W3Q442", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q44_6, into = c("W3Q446", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w3_q45_2, into = c("W3Q452", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q47_1, into = c("W4Q471", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q47_2, into = c("W4Q472", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q48_1, into = c("W4Q481", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q48_2, into = c("W4Q482", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q48_6, into = c("W4Q486", "varvalue"), sep = " ")
+Louelle_ESS <- separate(Louelle_ESS, w4_q49_2, into = c("W4Q492", "varvalue"), sep = " ")
 
-#Adding the variables for political knowledge to the object MAT, recoding them as 1 (for a correct answer) and 0 (for an uncorrect one)
-MAT <- ESSclean %>%
-mutate(Plknowl1_1 = ifelse(PolKnowl1 == "Frans Timmermans", 1, 0)) %>%
-mutate(Plknowl1_2 = ifelse(PolKnowl2 == "4 jaar", 1, 0)) %>%
-mutate(Plknowl1_3 = ifelse(PolKnowl3 == 26 , 1, 0)) %>%
-mutate(Plknowl1_4 = ifelse(PolKnowl4 == 28, 1, 0)) %>%
-mutate(Plknowl1_5 = ifelse(PolKnowl5 == "Martin Schulz", 1, 0)) 
+# Remove the columns that have the description (character) of the Likert-scale that measures Political Cynicism
+Louelle_ESS$varvalue <- NULL
 
-#Creating variables "PoliticalKnowledge" and "AntiImmigrationLevel" computing the means of the scores from the questions about anti-immigrant attitudes and political knowledge. Political knowledge has already been recoded in order to be relating to the cases by view (PoKnowl1 is displaying values for wave 1, PolKnowl2 for wave 2 etc.)
-MAT$PoliticalKnowledge <- rowMeans(subset(MAT, select = c(Plknowl1_1, Plknowl1_2, Plknowl1_3, Plknowl1_4, Plknowl1_5)), na.rm = TRUE)
+# Change the Likert-scales that measure Political Cynicism from character to numeric
+Louelle_ESS$w1_q10_1 <- as.numeric(as.character(Louelle_ESS$w1_q10_1))
+Louelle_ESS$w1_q10_2 <- as.numeric(as.character(Louelle_ESS$w1_q10_2))
+Louelle_ESS$w1_q10_3 <- as.numeric(as.character(Louelle_ESS$w1_q10_3))
+Louelle_ESS$w1_q10_4 <- as.numeric(as.character(Louelle_ESS$w1_q10_4))
+Louelle_ESS$w2_q7_1 <- as.numeric(as.character(Louelle_ESS$w2_q7_1))
+Louelle_ESS$w2_q7_2 <- as.numeric(as.character(Louelle_ESS$w2_q7_2))
+Louelle_ESS$w2_q7_3 <- as.numeric(as.character(Louelle_ESS$w2_q7_3))
+Louelle_ESS$w2_q7_4 <- as.numeric(as.character(Louelle_ESS$w2_q7_4))
+Louelle_ESS$w3_q11_1 <- as.numeric(as.character(Louelle_ESS$w3_q11_1))
+Louelle_ESS$w3_q11_2 <- as.numeric(as.character(Louelle_ESS$w3_q11_2))
+Louelle_ESS$w3_q11_3 <- as.numeric(as.character(Louelle_ESS$w3_q11_3))
+Louelle_ESS$w3_q11_4 <- as.numeric(as.character(Louelle_ESS$w3_q11_4))
+Louelle_ESS$w4_q13_1 <- as.numeric(as.character(Louelle_ESS$w4_q13_1))
+Louelle_ESS$w4_q13_2 <- as.numeric(as.character(Louelle_ESS$w4_q13_2))
+Louelle_ESS$w4_q13_3 <- as.numeric(as.character(Louelle_ESS$w4_q13_3))
+Louelle_ESS$w4_q13_4 <- as.numeric(as.character(Louelle_ESS$w4_q13_4))
+Louelle_ESS$W1Q491 <- as.numeric(as.character(Louelle_ESS$W1Q491))
+Louelle_ESS$W1Q492 <- as.numeric(as.character(Louelle_ESS$W1Q492))
+Louelle_ESS$W1Q501 <- as.numeric(as.character(Louelle_ESS$W1Q501))
+Louelle_ESS$W1Q502 <- as.numeric(as.character(Louelle_ESS$W1Q502))
+Louelle_ESS$W1Q506 <- as.numeric(as.character(Louelle_ESS$W1Q506))
+Louelle_ESS$W1Q512 <- as.numeric(as.character(Louelle_ESS$W1Q512))
+Louelle_ESS$W2Q441 <- as.numeric(as.character(Louelle_ESS$W2Q441))
+Louelle_ESS$W2Q442 <- as.numeric(as.character(Louelle_ESS$W2Q442))
+Louelle_ESS$W2Q451 <- as.numeric(as.character(Louelle_ESS$W2Q451))
+Louelle_ESS$W2Q452 <- as.numeric(as.character(Louelle_ESS$W2Q452))
+Louelle_ESS$W2Q456 <- as.numeric(as.character(Louelle_ESS$W2Q456))
+Louelle_ESS$W2Q462 <- as.numeric(as.character(Louelle_ESS$W2Q462))
+Louelle_ESS$W3Q431 <- as.numeric(as.character(Louelle_ESS$W3Q431))
+Louelle_ESS$W3Q432 <- as.numeric(as.character(Louelle_ESS$W3Q432))
+Louelle_ESS$W3Q441 <- as.numeric(as.character(Louelle_ESS$W3Q441))
+Louelle_ESS$W3Q442 <- as.numeric(as.character(Louelle_ESS$W3Q442))
+Louelle_ESS$W3Q446 <- as.numeric(as.character(Louelle_ESS$W3Q446))
+Louelle_ESS$W3Q452 <- as.numeric(as.character(Louelle_ESS$W3Q452))
+Louelle_ESS$W4Q471 <- as.numeric(as.character(Louelle_ESS$W4Q471))
+Louelle_ESS$W4Q472 <- as.numeric(as.character(Louelle_ESS$W4Q472))
+Louelle_ESS$W4Q481 <- as.numeric(as.character(Louelle_ESS$W4Q481))
+Louelle_ESS$W4Q482 <- as.numeric(as.character(Louelle_ESS$W4Q482))
+Louelle_ESS$W4Q486 <- as.numeric(as.character(Louelle_ESS$W4Q486))
+Louelle_ESS$W4Q492 <- as.numeric(as.character(Louelle_ESS$W4Q492))
 
-MAT$AntiImmigrationLevel <- rowMeans(subset(MAT, select = c(antiimm1, antiimm2, antiimm3, antiimm4, antiimm5, antiimm6, antiimm7, antiimm8)), na.rm = TRUE)
+# Calculate the average mean of the construct Political Cynisism (by wave)
+Louelle_ESS$Mean <- ifelse(Louelle_ESS$Wavevalue == 1, rowMeans(subset(Louelle_ESS, select = c(w1_q10_1,w1_q10_2, w1_q10_3, w1_q10_4)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 2, rowMeans(subset(Louelle_ESS, select = c(w2_q7_1, w2_q7_2, w2_q7_3, w2_q7_4)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 3, rowMeans(subset(Louelle_ESS, select = c(w3_q11_1, w3_q11_2, w3_q11_3, w3_q11_4)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 4, rowMeans(subset(Louelle_ESS, select = c(w4_q13_1, w4_q13_2, w4_q13_3, w4_q13_4)), na.rm = TRUE), NA))))
 
+Louelle_ESS$w1_q10_1 <- NULL
+Louelle_ESS$w1_q10_2 <- NULL
+Louelle_ESS$w1_q10_3 <- NULL
+Louelle_ESS$w1_q10_4 <- NULL
+Louelle_ESS$w2_q7_1 <- NULL
+Louelle_ESS$w2_q7_2 <- NULL
+Louelle_ESS$w2_q7_3 <- NULL
+Louelle_ESS$w2_q7_4 <- NULL
+Louelle_ESS$w3_q11_1 <- NULL
+Louelle_ESS$w3_q11_2 <- NULL
+Louelle_ESS$w3_q11_3 <- NULL
+Louelle_ESS$w3_q11_4 <- NULL
+Louelle_ESS$w4_q13_1 <- NULL
+Louelle_ESS$w4_q13_2 <- NULL
+Louelle_ESS$w4_q13_3 <- NULL
+Louelle_ESS$w4_q13_4 <- NULL
 
-#Creating a dataframe with the three variables of interest
-MAT2 <-  MAT %>%
-  select(AntiImmigrationLevel, PoliticalKnowledge, Wavevalue)
+# Filter Content Analysis-data to only "Elections" articles in Dutch media (de Telegraaf, de Volkskrant, NOS Journaal, NRC Handelsblad, nu.nl and RTL Nieuws)
+Louelle_CA <- Louelle_CA %>% filter(V6Topic == "Elections") %>% filter(V4 %in% c("de Telegraaf", "de Volkskrant", "NOS Journaal", "NRC Handelsblad", "nu.nl", "RTL Nieuws")) %>% count(date)
+Louelle_CA$n <- as.numeric(as.integer(Louelle_CA$n))
 
-#Installing plotly and uploading plotly and tidyverse
-install.packages("plotly")
-library(plotly)
-library(tidyverse)
+# Filter Survey-data so only respondents who are exposed to one of the media outlets (de Telegraaf, de Volkskrant, NOS Journaal, NRC Handelsblad, nu.nl and RTL Nieuws) at least once a week 
+Louelle_ESS$sum <- ifelse(Louelle_ESS$Wavevalue == 1,rowSums(subset(Louelle_ESS, select = c(W1Q491, W1Q492, W1Q501, W1Q502, W1Q506)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 2, rowSums(subset(Louelle_ESS, select = c(W2Q441, W2Q442, W2Q451, W2Q452, W2Q452, W2Q462)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 3, rowSums(subset(Louelle_ESS, select = c(W3Q431, W3Q432, W3Q441, W3Q442, W3Q452)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 4, rowSums(subset(Louelle_ESS, select = c(W4Q471, W4Q472, W4Q481, W4Q482, W4Q492)), na.rm = TRUE), NA))))
+Louelle_ESS <- Louelle_ESS %>% filter(sum >= 1)
 
-#Filtering by the first two waves, since anti-immigrant attitudes were only calculated during the 1st and 2nd wave.
-MAT2 <- MAT2 %>%
-  filter(Wavevalue == 1 | Wavevalue == 2)
+# Merge content analysis data with survey data
+Louelle_ALL <- merge(Louelle_ESS, Louelle_CA, by = c("date"), all = TRUE)
 
-#Creating a plot with the geom_bin
-p <- ggplot(data = MAT2, aes(x = PoliticalKnowledge, y = AntiImmigrationLevel)) +
-  geom_bin2d(bins =6, color = "white") +
-  scale_fill_gradient(low = "#00AFBB", high = "#FC4E07")+
-  theme_minimal()  + facet_wrap(~Wavevalue)
-
-#Displaying the plot
-p <- ggplotly(p)
+# Plot the variables over time
+p <- ggplot(data = Louelle_ALL, aes(date))
+p <- p + geom_smooth(aes(y = n, color = "Amount of articles about elections"), se = FALSE)
+p <- p + geom_point(aes(y = Mean), position = "jitter", color = "sky blue", alpha = 1/8)
+p <- p + geom_smooth(aes(y = Mean, color = "Polytical cynicism"), se = FALSE)
+p <- p + labs(x = "Date", title = "(Second-Level) Agenda Setting:", subtitle = "The influence of Dutch media coverage about 2014 EU elections on political cynicism", y = "Political cynicism")
+p <- p + scale_y_continuous(limits = c(1, 7), breaks = c(1, 2, 3, 4, 5, 6, 7), sec.axis = sec_axis(name = "Amount of articles", ~ . * 21 / 7))
+p <- p + theme_minimal(base_size = 11)
+p <- p + theme(legend.position = "bottom")
+p <- p + scale_colour_manual(name = " ", values = c("deep sky blue 4", "sky blue 2"))
+p <- p + annotate("text", x=as.Date("2014-05-22", "%Y-%m-%d"), y=5.5, label= "2014 EU election", size=2.5, angle=19)
+p <- p + annotate("text", x=as.Date("2014-03-10", "%Y-%m-%d"), y=6.7, label= "Local elections in EU Countries", size=2.5, angle=19)
+p <- p + geom_segment(aes(x = as.Date("2014-05-20", "%Y-%m-%d"), y=4.85, xend = as.Date("2014-05-20", "%Y-%m-%d"), yend = 5.25), size = 0.2, color = "deep sky blue 4", linetype = "dotted")
+p <- p + geom_segment(aes(x = as.Date("2014-03-17", "%Y-%m-%d"), y=6.25, xend = as.Date("2014-03-17", "%Y-%m-%d"), yend = 6.7), size = 0.3, color = "deep sky blue 4", linetype = "dotted")
+p <- p + geom_segment(aes(x = as.Date("2014-02-28", "%Y-%m-%d"), y=5.8, xend = as.Date("2014-02-28", "%Y-%m-%d"), yend = 6.2), size = 0.2, color = "deep sky blue 4", linetype = "dotted")
+p <- p + theme(panel.grid.minor = element_blank())
 p
-
-
-
-
 ```
 
+With the graph above, the relationship between Dutch media coverage (both newspaper, TV and online) and political cynicism amongst the public is shown. Both the amount of articles about elections and the (average) score on political cynicism (from 1 -totally disagree- to 7 -totally agree-) are plotted over time. 
+
+The graph shows that the amount of Dutch articles obout the 2014 EU Elections does not have a direct influence on political cynicism amongst the public. The average score on political cynicism stays somewhat fixed over time.
+
+When critically assessing the graph, some uncertainty problems arise. First of all, political cynicism has only been measured in the four-wave panel survey. Thus, between the four waves (represented in the graph by the grouped dots) political cynicism is not measured and therefore it cannot be concluded with full confidence that (the score on) political cynicism has not changed over time. Besides, the content and sentiment of the news articles about elections is not taken into account within this analysis and it remains unclear whether the survey-respondets were actually exposed to the media content about elections or not. These two factors might play an important (moderating) role in the influence of media coverage on political cynicism. In future research, these factors should be taken into account.
