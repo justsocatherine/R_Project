@@ -468,6 +468,7 @@ The graph shows that the amount of Dutch articles obout the 2014 EU Elections do
 When critically assessing the graph, some uncertainty problems arise. First of all, political cynicism has only been measured in the four-wave panel survey. Thus, between the four waves (represented in the graph by the grouped dots) political cynicism is not measured and therefore it cannot be concluded with full confidence that (the score on) political cynicism has not changed over time. Besides, the content and sentiment of the news articles about elections is not taken into account within this analysis and it remains unclear whether the survey-respondets were actually exposed to the media content about elections or not. These two factors might play an important (moderating) role in the influence of media coverage on political cynicism. In future research, these factors should be taken into account.
 
 ## Matteo Rinaldi
+### Political Knowledge and Anti-Immigrant attitudes: what relationship?
 ```{r Matteo Rinaldi, echo = FALSE, message = FALSE, warning = FALSE}
 #Using the stripper function in order to treat data about anti-immigration attitudes as numeric and be able to use only the numerical number from the observations (E.g. '1 helemaal mee eens' becomes 1).Adding columns for the anti-immigration attitudes as umeric and then recode them as 1 when the attitudes is 5 or higher towards a negative attitude.
 MAT <- ESSclean %>%
