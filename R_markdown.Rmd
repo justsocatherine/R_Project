@@ -4,9 +4,9 @@ author: Katerin Kunfermann (), Haylee Kelsall (11665424), Louelle Pesurnaij (107
   Matteo Rinaldi ()
 date: "31 January 2019"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -292,6 +292,8 @@ PVV50 <- CA %>% #@@Ask whether we have to totally redo this table or not.
   
 ```
 
+
+## Louelle Pesurnaij
 ```{r Louelle Pesurnaij, echo = FALSE, message = FALSE, warning = FALSE}
 #Create tables with variables for Louelle's visualization
 Louelle_ESS <- ESSclean %>% select(RESPNR, Wavevalue, date, w1_q10_1, w1_q10_2, w1_q10_3,w1_q10_4, w2_q7_1, w2_q7_2, w2_q7_3, w2_q7_4, w3_q11_1, w3_q11_2, w3_q11_3, w3_q11_4, w4_q13_1, w4_q13_2, w4_q13_3, w4_q13_4, w1_q49_1, w1_q49_2, w1_q50_1, w1_q50_2, w1_q50_6, w2_q44_1, w2_q44_2, w2_q45_1, w2_q45_2, w2_q45_6, w3_q43_1, w3_q43_2, w3_q44_1, w3_q44_2, w3_q44_6, w4_q47_1, w4_q47_2, w4_q48_1, w4_q48_2, w4_q48_6,w1_q51_2, w2_q46_2, w3_q45_2, w4_q49_2)
