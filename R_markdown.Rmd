@@ -41,7 +41,7 @@ library(plotly)
 library(ggthemes)
 
 
-#Stripper function used in some data work
+#Stripper function used in our data work, in order to strip out numerical values from strings.
 
 stripper <- function(string){ 
   str_extract(string, "\\-*\\d+\\.*\\d*")
@@ -50,15 +50,15 @@ stripper <- function(string){
 CA <- read_csv("Dataset MCA EPE 2014 NL FINAL.csv") #Read content analysis file, store under CA
 
 
-ESS <- read_csv("All waves GENERAL.csv") # read survey file, store under ESS (Election Study Survey)
+ESS <- read_csv("All waves GENERAL.csv") # Read survey file, store under ESS (Election Study Survey)
 
 #Tidying the data set. Step ONE: Seperate respondent fixed characteristics, with help of code book.
 #Examples of these: demographics, big 5 personality traits etc. Here the RESPONDENT is the unit. 
 #We also want to include here a column for the waves which the participant was in, we only have the 'GENERAL' panel data so not neccessary to create additional columns for other panels. 
 
 ESS %>%
-  summarise(n_RESPS = n_distinct(RESPNR)) #Check all respondent IDs unique. Respondent ID will be #used as our primary key in this table.
-# @ wave weighting should probabbly be in the wave'd variables seeing as they apply to each wave, fix this later @H
+  summarise(n_RESPS = n_distinct(RESPNR)) #Check all respondent IDs unique. Respondent ID will be used as our primary key in this table.
+
 
 #tidy columns respondent ID and Waves
 ESS %>% count(WAVES) #First count the number of respondents participating in each level of 'WAVES'.
@@ -80,24 +80,26 @@ ESS$wave4 <- ifelse(ESS$WAVES == "All waves", 1, 0) #Create new column called "w
 RESP_DEMOG <- ESS %>%
   group_by(INTNR, RESPNR,	SAMPLE,	WAVES,	GEWICHTA1_w1,	GEWICHTA1_w2,	GEWICHTA1_w3,	GEWICHTA1_w4,	GSL,	LFT,	OPLA,	NIELSENCBS,	GEZINSGROOTTE,	POL2012, w1_q5_1, w1_q5_2, w1_q5_3, w1_q5_4, w1_q17_1, w1_q17_2, w1_q17_3, w1_q17_4, w1_q23, w1_q24_1, w1_q24_2, w1_q24_3, w1_q29, w1_q30_1,w1_q30_2,	w1_q30_3,	w1_q30_4,	w1_q30_5,	w1_q30_6,	w1_q30_7,	w1_q30_8,	w1_q30_9,	w1_q30_10,	w1_q30_11, w1_q31_1,	w1_q31_2,	w1_q31_3,	w1_q31_4,	w1_q31_5,	w1_q31_6,	w1_q31_7,	w1_q31_8,	w1_q31_9,	w1_q32_1,	w1_q32_2,	w1_q32_3,	w1_q32_4, w1_q57_1,	w1_q57_2,	w1_q57_3,	w1_q57_4,	w1_q57_5,	w1_q57_6,	w1_q57_7,	w1_q57_8,	w1_q58_1,	w1_q58_2,	w1_q58_3,	w1_q58_4,	w1_q58_5,	w1_q58_6,	w1_q58_7,	w1_q58_8,	w1_q58_9,	w1_q58_10,	w1_q59,	w1_q60,	w1_q61,	w1_q62,	w1_q64,	w1_q65,	w1_q66,	w1_q67,	w1_q68,	w1_q68_YES, w2_q25,	w2_q26_1,	w2_q26_2,	w2_q26_3,	w2_q26_4,	w2_q26_5,	w2_q26_6,	w2_q26_7,	w2_q26_8,	w2_q26_9,	w2_q26_10,	w2_q26_11,	w2_q27_1,	w2_q27_2,	w2_q27_3,	w2_q27_4,	w2_q27_5,	w2_q27_6,	w2_q27_7,	w2_q27_8,	w2_q27_9,	w2_q28_1,	w2_q28_2,	w2_q28_3,	w2_q28_4,	w2_q28_5,	w2_q28_6,	w2_q28_7,	w2_q28_8,	w2_q28_9,	w2_q28_10,	w2_q28_11,	w2_q29,	w2_q30,	w2_q30_OTHER_LOCAL,	w2_q30_OTHER,	w2_q31,	w2_q32_1,	w2_q32_2,	w2_q32_3,	w2_q32_4,	w2_q32_5,	w2_q32_OTHER,	w2_q33_1,	w2_q33_2,	w2_q33_3,	w2_q33_4,	w2_q33_5,	w2_q33_6,	w2_q33_7,	w2_q33_8,	w2_q33_9,	w2_q33_10,	w2_q33_11,	w2_q33_12,	w2_q33_13,	w2_q33_14,	w2_q33_OTHER_LOCAL,	w2_q33_OTHER,	w2_q50_1,	w2_q50_2,	w2_q50_3,	w2_q50_4,	w2_q50_5,	w2_q50_6,	w2_q51,	w2_q52_1,	w2_q52_2,	w2_q52_3,	w2_q52_4,	w2_q52_5,	w2_q53_1,	w2_q53_2,	w2_q54,	w2_q55,	w2_q56_1,	w2_q56_2,	w2_q56_3,	w2_q56_4, w2_q61_1,	w2_q61_2,	w2_q62_CONDITION1,	w2_q62_CONDITION2, w2_q63,	w2_q65, w3_q49TRUE_1,	w3_q49TRUE_2,	w3_q49TRUE_3,	w3_q49TRUE_4,	w3_q49TRUE_5,	w3_q49TRUE_6,	w3_q49TRUE_7,	w3_q49_1,	w3_q49_2,	w3_q49_3,	w3_q49_4,	w3_q49_5,	w3_q49_6,	w3_q49_7, w3_q56_CONDITION1_1,	w3_q56_CONDITION1_2,	w3_q56_CONDITION1_3,	w3_q56_CONDITION1_4,	w3_q56_CONDITION2_1,	w3_q56_CONDITION2_2,	w3_q56_CONDITION2_3,	w3_q56_CONDITION2_4,	w3_q56_TIMESTAMP, w3_q59_1,	w3_q59_2,	w3_q59_3,	w3_q60_1,	w3_q60_2,	w3_q60_3,	w3_q60_4, w4_q7,	w4_q8,	w4_q9, w4_q27, w4_q41_1,	w4_q41_2,	w4_q41_3,	w4_q41_4,	w4_q41_5,	w4_q41_6,	w4_q41_7,	w4_q41_8,	w4_q41_9,	w4_q41_10,	w4_q41_11, w4_q41_12,  w4_q43_1,	w4_q43_2,	w4_q43_3,	w4_q43_4,	w4_q43_5,	w4_q43_6,	w4_q43_7,	w4_q43_8,	w4_q43_9,	w4_q43_10,	w4_q43_11,	w4_q43_12, w4_q51_1,	w4_q51_2,	w4_q51_3,	w4_q51_4,	w4_q51_5,	w4_q51_OTHER,	w4_q52_1,	w4_q52_2,	w4_q52_3,	w4_q52_4,	w4_q52_5,	w4_q52_6,	w4_q52_7,	w4_q52_8,	w4_q52_9,	w4_q52_10,	w4_q52_11,	w4_q52_12,	w4_q52_13,	w4_q52_OTHER, w4_q57, w4_q62_1,	w4_q62_2,	w4_q62_3,	w4_q62_4,	w4_q62_5,	w4_q62_6,	w4_q62_7) %>%
 summarise()
-RESP_DEMOG #Now we have a table with all fixed characteristics of respondents. We still need to check every single variable that it meets rules of tidy data even thouh now at least 'each unit has its own table' is PARTLY fulfilled with this table @@
+RESP_DEMOG #Now we have a table with all fixed characteristics of respondents. We checked if every variables, observations, and rows were respecting the rules of tidy data. We esnured that each variable had its own column, and that values were not variables. We used the head() command to chec the first rows and then compared also to the excel tables we had. We also checked that each type of unit must have its own cell in this way, as well as the rule that each value should have its own cell. Finally, we checked and ensured that each observation had its own row: we checked the tables and we used the distinct() command to check if some of the variables were repeated.
 
-#@@ NOTE!!! SOME VARIABLES ABOVE HAVE BEEN RECODED already into standard variable names already such as w1_q61 is actualy OPLA (opleiding) 
 
-#Change W3_Q56
+
+#Here we Change W3_Q56
 RESP_DEMOG_test <- RESP_DEMOG %>% group_by(RESPNR, w3_q56_CONDITION1_1, w3_q56_CONDITION1_2, w3_q56_CONDITION1_3, w3_q56_CONDITION1_4, w3_q56_CONDITION2_1, w3_q56_CONDITION2_2, w3_q56_CONDITION2_3, w3_q56_CONDITION2_4) %>% select(RESPNR, w3_q56_CONDITION1_1, w3_q56_CONDITION1_2, w3_q56_CONDITION1_3, w3_q56_CONDITION1_4, w3_q56_CONDITION2_1, w3_q56_CONDITION2_2, w3_q56_CONDITION2_3, w3_q56_CONDITION2_4)
 
-#Splitting the Experiment-data
+#Here we are splitting the Experiment-data
 RESP_DEMOG$W3_Q56_CONDITION <- ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_1), 1, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_2), 1, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_3), 1, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_4), 1, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION2_1), 2, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION2_2), 2, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION2_3), 2, ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION2_4), 2, NA)))))))) 
 
 ```
 
 
 ```{r Spread the waveeeeees, include=FALSE, message = FALSE, warning = FALSE}
-#select relevant variables for all waves
+#We created a new table, called ESSclean, which is a table without the "fixed" characteristics (such as demographics) and the waves those variables have been measured. 
 ESSclean <- select(ESS, -c(INTNR, SAMPLE,	GEWICHTA1_w1,	GEWICHTA1_w2,	GEWICHTA1_w3,	GEWICHTA1_w4,	GSL,	LFT,	OPLA,	NIELSENCBS,	GEZINSGROOTTE,	POL2012, w1_q5_1, w1_q5_2, w1_q5_3, w1_q5_4, w1_q17_1, w1_q17_2, w1_q17_3, w1_q17_4, w1_q23, w1_q24_1, w1_q24_2, w1_q24_3, w1_q29, w1_q30_1,w1_q30_2,	w1_q30_3,	w1_q30_4,	w1_q30_5,	w1_q30_6,	w1_q30_7,	w1_q30_8,	w1_q30_9,	w1_q30_10,	w1_q30_11, w1_q31_1,	w1_q31_2,	w1_q31_3,	w1_q31_4,	w1_q31_5,	w1_q31_6,	w1_q31_7,	w1_q31_8,	w1_q31_9,	w1_q32_1,	w1_q32_2,	w1_q32_3,	w1_q32_4, w1_q57_1,	w1_q57_2,	w1_q57_3,	w1_q57_4,	w1_q57_5,	w1_q57_6,	w1_q57_7,	w1_q57_8,	w1_q58_1,	w1_q58_2,	w1_q58_3,	w1_q58_4,	w1_q58_5,	w1_q58_6,	w1_q58_7,	w1_q58_8,	w1_q58_9,	w1_q58_10,	w1_q59,	w1_q60,	w1_q61,	w1_q62,	w1_q64,	w1_q65,	w1_q66,	w1_q67,	w1_q68,	w1_q68_YES, w2_q25,	w2_q26_1,	w2_q26_2,	w2_q26_3,	w2_q26_4,	w2_q26_5,	w2_q26_6,	w2_q26_7,	w2_q26_8,	w2_q26_9,	w2_q26_10,	w2_q26_11,	w2_q27_1,	w2_q27_2,	w2_q27_3,	w2_q27_4,	w2_q27_5,	w2_q27_6,	w2_q27_7,	w2_q27_8,	w2_q27_9,	w2_q28_1,	w2_q28_2,	w2_q28_3,	w2_q28_4,	w2_q28_5,	w2_q28_6,	w2_q28_7,	w2_q28_8,	w2_q28_9,	w2_q28_10,	w2_q28_11,	w2_q29,	w2_q30,	w2_q30_OTHER_LOCAL,	w2_q30_OTHER,	w2_q31,	w2_q32_1,	w2_q32_2,	w2_q32_3,	w2_q32_4,	w2_q32_5,	w2_q32_OTHER,	w2_q33_1,	w2_q33_2,	w2_q33_3,	w2_q33_4,	w2_q33_5,	w2_q33_6,	w2_q33_7,	w2_q33_8,	w2_q33_9,	w2_q33_10,	w2_q33_11,	w2_q33_12,	w2_q33_13,	w2_q33_14,	w2_q33_OTHER_LOCAL,	w2_q33_OTHER,	w2_q50_1,	w2_q50_2,	w2_q50_3,	w2_q50_4,	w2_q50_5,	w2_q50_6,	w2_q51,	w2_q52_1,	w2_q52_2,	w2_q52_3,	w2_q52_4,	w2_q52_5,	w2_q53_1,	w2_q53_2,	w2_q54,	w2_q55,	w2_q56_1,	w2_q56_2,	w2_q56_3,	w2_q56_4, w2_q61_1,	w2_q61_2,	w2_q62_CONDITION1,	w2_q62_CONDITION2, w2_q63,	w2_q65, w3_q49TRUE_1,	w3_q49TRUE_2,	w3_q49TRUE_3,	w3_q49TRUE_4,	w3_q49TRUE_5,	w3_q49TRUE_6,	w3_q49TRUE_7,	w3_q49_1,	w3_q49_2,	w3_q49_3,	w3_q49_4,	w3_q49_5,	w3_q49_6,	w3_q49_7, w3_q56_CONDITION1_1,	w3_q56_CONDITION1_2,	w3_q56_CONDITION1_3,	w3_q56_CONDITION1_4,	w3_q56_CONDITION2_1,	w3_q56_CONDITION2_2,	w3_q56_CONDITION2_3,	w3_q56_CONDITION2_4,	w3_q56_TIMESTAMP, w3_q59_1,	w3_q59_2,	w3_q59_3,	w3_q60_1,	w3_q60_2,	w3_q60_3,	w3_q60_4, w4_q7,	w4_q8,	w4_q9, w4_q27, w4_q41_1,	w4_q41_2,	w4_q41_3,	w4_q41_4,	w4_q41_5,	w4_q41_6,	w4_q41_7,	w4_q41_8,	w4_q41_9,	w4_q41_10,	w4_q41_11, w4_q41_12,  w4_q43_1,	w4_q43_2,	w4_q43_3,	w4_q43_4,	w4_q43_5,	w4_q43_6,	w4_q43_7,	w4_q43_8,	w4_q43_9,	w4_q43_10,	w4_q43_11,	w4_q43_12, w4_q51_1,	w4_q51_2,	w4_q51_3,	w4_q51_4,	w4_q51_5,	w4_q51_OTHER,	w4_q52_1,	w4_q52_2,	w4_q52_3,	w4_q52_4,	w4_q52_5,	w4_q52_6,	w4_q52_7,	w4_q52_8,	w4_q52_9,	w4_q52_10,	w4_q52_11,	w4_q52_12,	w4_q52_13,	w4_q52_OTHER, w4_q57, w4_q62_1,	w4_q62_2,	w4_q62_3,	w4_q62_4,	w4_q62_5,	w4_q62_6,	w4_q62_7, wave1, wave2, wave3, wave4))
 
-#Change values 1 (=TRUE) to 2 (=participates in wave 2)
+##The aforementioned rules about data tidying have been checked for the ESS table as well. We noticed that, creating the ESS table, some information was not stacked properly. More precisely, there were observations that were repeated in the same row. We then proceeded to create a new variable (Wave) in order to be able to stack the repeated information and give each observation its own cell (e.g. political knowledge for case 1 in wave 1, then in a different row for wave 2 etc.)
+
+#Changing values 1 (=TRUE) to 2 (=participates in wave 2)
 #Wave 1
 ESSclean$wave1 <- ifelse(ESS$wave1 == 1, 1, NA)
 #Wave 2
@@ -110,12 +112,10 @@ ESSclean$wave4 <- ifelse(ESS$wave4 == 1, 4, NA)
 #Create one out of Wave 1, 2, 3, 4
 ESSclean <- ESSclean %>% gather(Wave, Wavevalue, wave1:wave4, na.rm = TRUE, convert = FALSE, factor_key = FALSE)
 
-
-
-#remove WAVES and Wave columns
+#Removing WAVES and Wave columns
 ESSclean$Wave <- NULL
 
-# Clean up date-variables
+# Cleaning up date-variables according to the new Wave variable
 ESSclean$date <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_DATUM, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_DATUM, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_DATUM, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_DATUM, NA))))
 
 # Change date-variable from character to actual date
@@ -126,22 +126,19 @@ ESSclean <- transform(ESSclean, date = as.Date(as.character(date), "%Y%m%d"))
 
 library(lubridate)
 
-#First parse date in original object so all latter tables will already have a 'date' column. day = V3a, month = V3b, year = V3c.
-CA$date <- with(CA, dmy(sprintf('%02d%02d%02d', V3a, V3b, V3c))) #Checked in console!
-#Also need to add unique id number to each item
+#First parse date in original object so all latter tables will already have a 'date' column. (day = V3a, month = V3b, year = V3c).
+CA$date <- with(CA, dmy(sprintf('%02d%02d%02d', V3a, V3b, V3c))) #We checked in console the accuracy of our code and it returned the correct format.
+#We also added unique id number to each item
 CA$ID <- seq.int(nrow(CA))
 
-CA$ID
-
-#Creating table for fixed characteristics relevant to all, i.e. items asked to everything. Checked using console. 
+#Creating table for fixed characteristics relevant to all, (i.e. items asked to everything). We checked the table correctness using console. 
 ALL_FIXED <- CA %>% 
   select(ID, V1,	V2,	V3a,	V3b,	V3c, date,	V4,	V5, V6,	V6_cleaned, NL1a : NL1f, V7, V8a, V8b, V9,V11, V12, V13, V14, V15a_TEXT : V15f_TEXT, V15_a_cleaned : V15_f_cleaned,  V16a : V16f, NL7a : NL7e, NL24, NL25, NL26, NL27, NL28a, NL28b, NL29a : NL29g, NL30, NL31, NL32a : NL32g, NL33) #Include V's asked for all
 
-#pull apart column V6_cleaned into two columns by splitting at the ":" 
+#We checked V6_cleaned and separated it in order to have a value in each cell, splitting the information at the ":" in the cells. We also checked the other rules for the data structure using the head() and distinct() commands and while also checking the dataframe.
 ALL_FIXED <- separate(ALL_FIXED, V6_cleaned, into = c("V6Topic", "V6Topicdescription"), sep = ":")
 
-#Creating Newspaper fixed characteristics table. Note: nu.nl is included as a newspaper, because it is treated as one in the codebook. Keeping V4 as article ID for primary key, also keeping V4 (outlet) as may be useful also. In addition, note that the belgium outlets are included as they're treated as newspapers. These
-#need to probably be removed if neccessary during later analysis!
+#Creating Newspaper fixed characteristics table. We decide to include nu.nl  as a newspaper since it is treated as one in the codebook. Keeping V4 as article ID for primary key. In addition, it should be noted that note that the belgium outlets are included as they're treated as newspapers. 
 CA_FIXED_NP <- CA %>%
   filter(V4 != "NOS Journaal" & V4 != "RTL Nieuws")%>% #Exclude (filter out) the two TV channels
   select(ID, V2,	V4, NP1,	NP2,	NP3,	NP4,	NP5,	NP6,	NP7) 
@@ -152,6 +149,7 @@ CA_FIXED_NP <- CA %>%
 # the codebook '(V6) = [0124 | 0501 thru 0507 | 0704 | 1204 | 1603]'. Therefore only articles/news with these 
 #topics are included in this table. It also includes their ID number and primary topic as keys @@??
 
+#We created a table for the
 MUS_POL <- CA %>%
   select(ID, V2, V6, NL2_1_1 : NL2_4_3, NL3, NL4_1_1 : NL4_4_3, NL5) %>%
   filter(V6 == "Economy: Free movement of people within the EU (common market: including the Schengen agreement)" | V6 == "Immigration : EU immigration policy - regulating immigration from outside the EU (e.g. refugees, asylum, EU border" | V6 == "Immigration : Migration / immigration policy – regulating migration within the EU (e.g. labour migration from East" | V6 == "Immigration : Immigration policy (non-EU) - regulating immigration from outside the EU" | V6 == "Immigration : Immigrant integration" | V6 =="Immigration : Multiculturalism (cultural diversity, cultural plurality)" | V6 == "Immigration : Anti-Islam" | V6 == "Immigration : Other immigration topics" | V6 == "Culture and Other: Religion" | V6 == "Citizens’ rights: Immigrant rights" | V6 == "Elections: Media coverage of the campaign") 
@@ -272,27 +270,28 @@ MUS_POL$NL4_4_3 <- NULL
 
 MUS_POL$NL5 <- NULL
 
+#We created a new table fromt he content analysis dataset only showing television related content
 CA_FIXED_TV <- CA %>%
   filter(V4 == "NOS Journaal" | V4 == "RTL Nieuws")%>% #Exclude (filter out) the newspapers
   select(V2,	V4, TV1, TV2)
 
-
-APRIL <- CA %>% #Table with variables coded only after april the 17th 
+#We then proceeded creating a table with all the variables coded after April the 17th
+APRIL <- CA %>% 
   select(V2, date, V9,	V9b,	V10a : V10c,	NL6_1_1 : NL6_3_4,	NL8a,	NL9a_1 : NL9a_5_TEXT, NL9b_1 : NL9b_5_TEXT, NL9c1 : NL9c5_TEXT, NL9d1 : NL9d5_TEXT,	NL10a : NL10d, NL11a1 : NL23d5_TEXT,	NL34 : NL41f, NL42a_a : NL42b_SP_f, NL43, NL44, NL45 : NL47) %>% 
-filter(date >= as.Date("2014-04-17")) #and include cases only after filtered date, 17th April
+filter(date >= as.Date("2014-04-17"))
 
   
 
 ```
 
 ```{r include=FALSE, message = FALSE, warning = FALSE}
-#Creating a table for the PVV 50PLUS articles. 
-#NOTE: This table @@was not further tidied as tidying would be similar to what was demonstrated with the MUS/POLE table above.
+#Since we noticed that many questions were repeated exactly the same for two parties (50PLUS and PVV), we decided to create a table for these articles. 
+#NOTE: This table was not further tidied as tidying would be similar to what was demonstrated with the MUS/POLE table above.
 #Therefore, variables required by group members for their own analyses were tidied as required, rather than restructuring this entire table. 
-#See for example PVVH table used by Haylee. 
+ 
 
-PVV50 <- CA %>% #@@Ask whether we have to totally redo this table or not.
-  filter(date >= as.Date("2014-04-17"))%>% #and include cases only after filtered date, 17th April
+PVV50 <- CA %>% 
+  filter(date >= as.Date("2014-04-17"))%>% #We included cases only after  the 17th of April, since the articles were coded after that period of time
   dplyr::select(V2, NL8a, NL8b, NL8c, NL8d, NL9a_1:NL9a_5_TEXT, NL9b_1:NL9b_5_TEXT, NL9c1:NL9c5_TEXT, NL9d1:NL9d5_TEXT, NL10a, NL10b, NL10c, NL10d, NL11a1:NL11a5_TEXT, NL11b1:NL11b5_TEXT, NL11c1:NL11c5_TEXT, NL11d1:NL11d5_TEXT, NL12a, NL12b, NL12c, NL12d, NL13a1:NL13a5_TEXT, NL13b1:NL13b5_TEXT, NL13c1:NL13c5_TEXT, NL13d1:NL13d5_TEXT, NL14a, NL14b, NL14c, NL14d,  NL15a1:NL15a5_TEXT, NL15b1:NL15b5_TEXT, NL15c1:NL15c5_TEXT, NL15d1:NL15d5_TEXT, NL16a, NL16b, NL16c, NL16d, NL17a1:NL17a5_TEXT, NL17b1:NL17b5_TEXT, NL17c1:NL17c5_TEXT, NL17d1:NL17d5_TEXT, NL18a, NL18b, NL18c, NL18d, NL19a1:NL19a5_TEXT, NL19b1:NL19b5_TEXT, NL19c1:NL19c5_TEXT, NL19d1:NL19d5_TEXT, NL20a, NL20b, NL20c, NL20d, NL21a1:NL21a5_TEXT, NL21b1:NL21b5_TEXT, NL21c1:NL21c5_TEXT, NL21d1:NL21d5_TEXT, NL22a, NL22b, NL22c, NL22d, NL23a1:NL23a5_TEXT, NL23b1:NL23b5_TEXT, NL23c1:NL23c5_TEXT, NL23d1:NL23d5_TEXT)
 
 
@@ -519,7 +518,9 @@ p <- ggplotly(p)
 p
 ```
 
-In this graphical representation I am using the data from the survey conducted between December 2013 and May 2014 about the attitudes and intentions of citizens towards the European Union. I decided to analyse the interaction between the political knowledge of the surveyd sample and their attitudes towards immigration. I was expecting this relation to be negative: the more one knows about politics and its complexity, the more should be aware that immigration is a complex process and that immigrants are not to blame for the core of the problem itself. I conducted the analysis by recoding the measurement for political knowledge as a dummy variable (right/wrong, coded as 1/0) and by recoding the variables measuring anti-immigrant attitudes by deciding that cases scoring higher or equal to 5 (on a 1 - 7 Likert scale) had to be considered like having a negative attitude toward immigrants, scoring then with a 1. I then created two new variables which are the mean of these results for each participant. I proceeded displaying how the interaction took place with a visualization with ggplot. Interestingly, it seems like the people knowing average about politics (in the centre of the 2d table) are the ones having both the most extreme and most tolerant attitudes towards immigrants. The situation did not changed with the second wave.
+In this graphical representation I am using the data from the survey conducted between December 2013 and May 2014 about the attitudes and intentions of citizens towards the European Union. I decided to analyse the interaction between the political knowledge of the surveyd sample and their attitudes towards immigration. I was expecting this relation to be negative: the more one knows about politics and its complexity, the more should be aware that immigration is a complex process and that immigrants are not to blame for the core of the problem itself. I was then expecting to find a higher count of anti-immigrant attitudes scores for those people who scored lower in political knowledge. I conducted the analysis by recoding the measurement for political knowledge as a dummy variable (right/wrong, coded as 1/0) and by recoding the variables measuring anti-immigrant attitudes (properly inverse recoded when needed) by deciding that cases scoring higher or equal to 5 (on a 1 - 7 Likert scale) had to be considered like having a negative attitude toward immigrants, being recoded then with a 1. 
+I then created two new variables which are the mean of these results for each participant. 
+I proceeded displaying how the interaction took place with a visualization with ggplot. Interestingly, it seems like the people knowing average about politics (in the centre of the 2d table) are the ones having both the most extreme and most tolerant attitudes towards immigrants. The situation did not changed with the second wave. Finally, as expected, people low in political interest, or with an amount below the 50% of right scores, are the ones that scored lower on anti-immigrant attitudes, showing then lower tolerance and levels of acceptace of immigrants in the country and in the Dutch culture. 
 
 
 
