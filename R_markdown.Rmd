@@ -1,6 +1,6 @@
 ---
 title: "European Election Campaign Study 2014"
-author: Katerin Kunfermann (), Haylee Kelsall (11665424), Louelle Pesurnaij (10750886),
+author: Katerin Kunfermann (12225223), Haylee Kelsall (11665424), Louelle Pesurnaij (10750886),
   Matteo Rinaldi (11580461)
 date: "31 January 2019"
 output:
@@ -43,15 +43,12 @@ library(ggthemes)
 
 
 #Stripper function used in our data work, in order to strip out numerical values from strings.
-
 stripper <- function(string){ 
   str_extract(string, "\\-*\\d+\\.*\\d*")
 } 
 
 
 CA <- read_csv("Dataset MCA EPE 2014 NL FINAL.csv") #Read content analysis file, store under CA
-
-
 ESS <- read_csv("All waves GENERAL.csv") # Read survey file, store under ESS (Election Study Survey)
 
 #Tidying the data set. Step ONE: Seperate respondent fixed characteristics, with help of code book.
@@ -95,7 +92,7 @@ RESP_DEMOG$W3_Q56_CONDITION <- ifelse(!is.na(RESP_DEMOG$w3_q56_CONDITION1_1), 1,
 ```
 
 
-```{r Spread the waveeeeees, include=FALSE, message = FALSE, warning = FALSE}
+```{r ESS tidying chunk, include=FALSE, message = FALSE, warning = FALSE}
 #We created a new table, called ESSclean, which is a table without the "fixed" characteristics (such as demographics) and the waves those variables have been measured. 
 ESSclean <- select(ESS, -c(INTNR, SAMPLE,	GEWICHTA1_w1,	GEWICHTA1_w2,	GEWICHTA1_w3,	GEWICHTA1_w4,	GSL,	LFT,	OPLA,	NIELSENCBS,	GEZINSGROOTTE,	POL2012, w1_q5_1, w1_q5_2, w1_q5_3, w1_q5_4, w1_q17_1, w1_q17_2, w1_q17_3, w1_q17_4, w1_q23, w1_q24_1, w1_q24_2, w1_q24_3, w1_q29, w1_q30_1,w1_q30_2,	w1_q30_3,	w1_q30_4,	w1_q30_5,	w1_q30_6,	w1_q30_7,	w1_q30_8,	w1_q30_9,	w1_q30_10,	w1_q30_11, w1_q31_1,	w1_q31_2,	w1_q31_3,	w1_q31_4,	w1_q31_5,	w1_q31_6,	w1_q31_7,	w1_q31_8,	w1_q31_9,	w1_q32_1,	w1_q32_2,	w1_q32_3,	w1_q32_4, w1_q57_1,	w1_q57_2,	w1_q57_3,	w1_q57_4,	w1_q57_5,	w1_q57_6,	w1_q57_7,	w1_q57_8,	w1_q58_1,	w1_q58_2,	w1_q58_3,	w1_q58_4,	w1_q58_5,	w1_q58_6,	w1_q58_7,	w1_q58_8,	w1_q58_9,	w1_q58_10,	w1_q59,	w1_q60,	w1_q61,	w1_q62,	w1_q64,	w1_q65,	w1_q66,	w1_q67,	w1_q68,	w1_q68_YES, w2_q25,	w2_q26_1,	w2_q26_2,	w2_q26_3,	w2_q26_4,	w2_q26_5,	w2_q26_6,	w2_q26_7,	w2_q26_8,	w2_q26_9,	w2_q26_10,	w2_q26_11,	w2_q27_1,	w2_q27_2,	w2_q27_3,	w2_q27_4,	w2_q27_5,	w2_q27_6,	w2_q27_7,	w2_q27_8,	w2_q27_9,	w2_q28_1,	w2_q28_2,	w2_q28_3,	w2_q28_4,	w2_q28_5,	w2_q28_6,	w2_q28_7,	w2_q28_8,	w2_q28_9,	w2_q28_10,	w2_q28_11,	w2_q29,	w2_q30,	w2_q30_OTHER_LOCAL,	w2_q30_OTHER,	w2_q31,	w2_q32_1,	w2_q32_2,	w2_q32_3,	w2_q32_4,	w2_q32_5,	w2_q32_OTHER,	w2_q33_1,	w2_q33_2,	w2_q33_3,	w2_q33_4,	w2_q33_5,	w2_q33_6,	w2_q33_7,	w2_q33_8,	w2_q33_9,	w2_q33_10,	w2_q33_11,	w2_q33_12,	w2_q33_13,	w2_q33_14,	w2_q33_OTHER_LOCAL,	w2_q33_OTHER,	w2_q50_1,	w2_q50_2,	w2_q50_3,	w2_q50_4,	w2_q50_5,	w2_q50_6,	w2_q51,	w2_q52_1,	w2_q52_2,	w2_q52_3,	w2_q52_4,	w2_q52_5,	w2_q53_1,	w2_q53_2,	w2_q54,	w2_q55,	w2_q56_1,	w2_q56_2,	w2_q56_3,	w2_q56_4, w2_q61_1,	w2_q61_2,	w2_q62_CONDITION1,	w2_q62_CONDITION2, w2_q63,	w2_q65, w3_q49TRUE_1,	w3_q49TRUE_2,	w3_q49TRUE_3,	w3_q49TRUE_4,	w3_q49TRUE_5,	w3_q49TRUE_6,	w3_q49TRUE_7,	w3_q49_1,	w3_q49_2,	w3_q49_3,	w3_q49_4,	w3_q49_5,	w3_q49_6,	w3_q49_7, w3_q56_CONDITION1_1,	w3_q56_CONDITION1_2,	w3_q56_CONDITION1_3,	w3_q56_CONDITION1_4,	w3_q56_CONDITION2_1,	w3_q56_CONDITION2_2,	w3_q56_CONDITION2_3,	w3_q56_CONDITION2_4,	w3_q56_TIMESTAMP, w3_q59_1,	w3_q59_2,	w3_q59_3,	w3_q60_1,	w3_q60_2,	w3_q60_3,	w3_q60_4, w4_q7,	w4_q8,	w4_q9, w4_q27, w4_q41_1,	w4_q41_2,	w4_q41_3,	w4_q41_4,	w4_q41_5,	w4_q41_6,	w4_q41_7,	w4_q41_8,	w4_q41_9,	w4_q41_10,	w4_q41_11, w4_q41_12,  w4_q43_1,	w4_q43_2,	w4_q43_3,	w4_q43_4,	w4_q43_5,	w4_q43_6,	w4_q43_7,	w4_q43_8,	w4_q43_9,	w4_q43_10,	w4_q43_11,	w4_q43_12, w4_q51_1,	w4_q51_2,	w4_q51_3,	w4_q51_4,	w4_q51_5,	w4_q51_OTHER,	w4_q52_1,	w4_q52_2,	w4_q52_3,	w4_q52_4,	w4_q52_5,	w4_q52_6,	w4_q52_7,	w4_q52_8,	w4_q52_9,	w4_q52_10,	w4_q52_11,	w4_q52_12,	w4_q52_13,	w4_q52_OTHER, w4_q57, w4_q62_1,	w4_q62_2,	w4_q62_3,	w4_q62_4,	w4_q62_5,	w4_q62_6,	w4_q62_7, wave1, wave2, wave3, wave4))
 
@@ -123,7 +120,6 @@ ESSclean$date <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_DATUM, ifelse(ESScl
 # Change date-variable from character to actual date
 ESSclean <- transform(ESSclean, date = as.Date(as.character(date), "%Y%m%d"))
 
-#LOUELLES BRILJANT INNOVATIVE IDEA
 #Example: Create the variables for Political Knowledge (i.e. PolKnowl)
 ESSclean$PolKnowl1 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q18, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q14, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q19, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q21, NA)))) #Create PolKnowl1
 ESSclean$PolKnowl2 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q19, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q15, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q20, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q22, NA)))) #Create PolKnowl2
@@ -136,7 +132,7 @@ ESSclean$PolKnowl5 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q22, ifelse(ES
 
 
 
-```{r - CA tidying chunk, include=FALSE, message = FALSE, warning = FALSE}
+```{r CA tidying chunk, include=FALSE, message = FALSE, warning = FALSE}
 
 #First parse date in original object so all latter tables will already have a 'date' column. (day = V3a, month = V3b, year = V3c).
 CA$date <- with(CA, dmy(sprintf('%02d%02d%02d', V3a, V3b, V3c))) #We checked in console the accuracy of our code and it returned the correct format.
@@ -298,7 +294,7 @@ filter(date >= as.Date("2014-04-17"))
 
 
 
-```{r PVV50, include=FALSE, message = FALSE, warning = FALSE}
+```{r PVV50 tidying chunk, include=FALSE, message = FALSE, warning = FALSE}
 
 #In the case of the following table, identical items were coded for PVV and 50 PLUS. Therefore, the unit would be the article and either PVV and/or 50PLUS. Although we did not tidy this table as the structure is similar to others (and it was not used by any of the group for their resulting graphs), had we tidied it, we would first have needed to create new rows for each observation, where an observation consisted of the article, and its PVV or 50PLUS item answers. The identical items would be then merged in a similar fashion to we have done with the MUS/POL table and the PolKnow example.  
 
@@ -468,6 +464,7 @@ The graph shows the relationship of media coverage (offline, online, and TV) in 
 The absence of the first level agenda-setting effect (stating that the higher media coverage about a certain topic the higher the awareness among participants about a certain topic) can be explained by a possible influence of other variables that influence the relationship (such as e.g. length of article/TV Report). Additionally, the four-wave-structure of the survey restrict the ability to generalize statements since the gaps in-between the waves set boundaries to make generalized statements.
 
 ## Louelle Pesurnaij
+### European Election Campaign Study 2014  (Panel Survey & Media Content Analysis)
 ```{r Louelle Pesurnaij, echo = FALSE, message = FALSE, warning = FALSE}
 #Create tables with variables for Louelle's visualization
 Louelle_ESS <- ESSclean %>% select(RESPNR, Wavevalue, date, w1_q10_1, w1_q10_2, w1_q10_3, w1_q10_4, w2_q7_1, w2_q7_2, w2_q7_3, w2_q7_4, w3_q11_1, w3_q11_2, w3_q11_3, w3_q11_4, w4_q13_1, w4_q13_2, w4_q13_3, w4_q13_4, w1_q49_1, w1_q49_2, w1_q50_1, w1_q50_2, w1_q50_6, w2_q44_1, w2_q44_2, w2_q45_1, w2_q45_2, w2_q45_6, w3_q43_1, w3_q43_2, w3_q44_1, w3_q44_2, w3_q44_6, w4_q47_1, w4_q47_2, w4_q48_1, w4_q48_2, w4_q48_6, w1_q51_2, w2_q46_2, w3_q45_2, w4_q49_2)
@@ -612,11 +609,9 @@ p
 
 ```
 
-With the graph above, the relationship between Dutch media coverage (both newspaper, TV and online) and political cynicism amongst the public is shown. Both the amount of articles about elections and the (average) score on political cynicism (from 1 -totally disagree- to 7 -totally agree-) are plotted over time. 
+In the graph above, the relationship between Dutch media coverage (both newspaper, TV and online) and political cynicism amongst the public (from 1 -totally disagree- to 7 -totally agree-) is plotted over time. The graph shows that the amount of Dutch articles about the 2014 EU Elections does not have a direct influence on political cynicism amongst the public. This contradicts the second-level agenda setting theory, which implies that media influence how the public perceives certain topics (such as politics). 
 
-The graph shows that the amount of Dutch articles obout the 2014 EU Elections does not have a direct influence on political cynicism amongst the public. The average score on political cynicism stays somewhat fixed over time.
-
-When critically assessing the graph, some uncertainty problems arise. First of all, political cynicism has only been measured in the four-wave panel survey. Thus, between the four waves (represented in the graph by the grouped dots) political cynicism is not measured and therefore it cannot be concluded with full confidence that (the score on) political cynicism has not changed over time. Besides, the content and sentiment of the news articles about elections is not taken into account within this analysis and it remains unclear whether the survey-respondets were actually exposed to the media content about elections or not. These two factors might play an important (moderating) role in the influence of media coverage on political cynicism. In future research, these factors should be taken into account.
+When critically assessing the graph, some uncertainty problems arise. First of all, political cynicism has only been measured in the four-wave panel survey, thus, political cynicism is not continously measured over time. Therefore it cannot be concluded with full confidence that there is an absence of the (second-level) agenda setting effect. Besides, article-attributes (e.g. the content and sentiment) are not taken into account within this analysis and it also remains unclear whether the survey-respondets were actually exposed to the media content or not. These two factors might play an important (moderating) role in the influence of media coverage on political cynicism. In future research, these factors could be taken into account.
 
 ## Matteo Rinaldi
 ### Political Knowledge and Anti-Immigrant attitudes: what relationship?
