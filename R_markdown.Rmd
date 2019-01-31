@@ -1,6 +1,6 @@
 ---
 title: "@@Add title"
-author: "Katerin Kunfermann, Haylee Kelsall 11665424, 12225223@@@@add names, Student numbers etc"
+author: "Katerin Kunfermann, Haylee Kelsall 11665424, Louelle Pesurnaij 12225223@@@@add names, Student numbers etc"
 date: "17 January 2019"
 output: pdf_document
 ---
@@ -113,20 +113,6 @@ ESSclean$date <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_DATUM, ifelse(ESScl
 
 # Change date-variable from character to actual date
 ESSclean <- transform(ESSclean, date = as.Date(as.character(date), "%Y%m%d"))
-
-#LOUELLES BRILJANT INNOVATIVE IDEA
-#Example: Create the variables for Political Knowledge (i.e. PolKnowl)
-ESSclean$PolKnowl1 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q18, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q14, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q19, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q21, NA)))) #Create PolKnowl1
-ESSclean$PolKnowl2 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q19, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q15, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q20, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q22, NA)))) #Create PolKnowl2
-ESSclean$PolKnowl3 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q20, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q16, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q21, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q23, NA)))) #Create PolKnowl3
-ESSclean$PolKnowl4 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q21, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q17, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q22, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q24, NA)))) #Create PolKnowl4
-ESSclean$PolKnowl5 <- ifelse(ESSclean$Wavevalue == 1, ESSclean$w1_q22, ifelse(ESSclean$Wavevalue == 2, ESSclean$w2_q18, ifelse(ESSclean$Wavevalue == 3, ESSclean$w3_q23, ifelse(ESSclean$Wavevalue == 4, ESSclean$w4_q25, NA)))) #Create PolKnowl5
-
-#PROOF THAT IT WORKS ( Example is a very indecisive respondent)
-ESSclean %>% select(RESPNR, Wavevalue, w1_q18, w2_q14, w3_q19, w4_q21) %>% filter(RESPNR == 30016148	)
-ESSclean %>% select(RESPNR, Wavevalue, PolKnowl1) %>% filter(RESPNR == 30016148	)
-
-
 ```
 
 ```{r - CA tidying chunk}
