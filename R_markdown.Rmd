@@ -387,7 +387,7 @@ Louelle_ESS$W4Q486 <- as.numeric(as.character(Louelle_ESS$W4Q486))
 Louelle_ESS$W4Q492 <- as.numeric(as.character(Louelle_ESS$W4Q492))
 
 # Calculate the average mean of the construct Political Cynisism (by wave)
-Louelle_ESS$Mean <- ifelse(Louelle_ESS$Wavevalue == 1, rowMeans(subset(Louelle_ESS, select = c(w1_q10_1, w1_q10_2, w1_q10_3, w1_q10_4)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 2, rowMeans(subset(Louelle_ESS, select = c(w2_q7_1, w2_q7_2, w2_q7_3, w2_q7_4)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 3, rowMeans(subset(Louelle_ESS, select = c(w3_q11_1, w3_q11_2, w3_q11_3, w3_q11_4)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 4, rowMeans(subset(Louelle_ESS, select = c(w4_q13_1, w4_q13_2, w4_q13_3, w4_q13_4)), na.rm = TRUE), NA))))
+Louelle_ESS$Mean <- ifelse(Louelle_ESS$Wavevalue == 1, rowMeans(subset(Louelle_ESS, select = c(w1_q10_1,w1_q10_2, w1_q10_3, w1_q10_4)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 2, rowMeans(subset(Louelle_ESS, select = c(w2_q7_1, w2_q7_2, w2_q7_3, w2_q7_4)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 3, rowMeans(subset(Louelle_ESS, select = c(w3_q11_1, w3_q11_2, w3_q11_3, w3_q11_4)), na.rm = TRUE), ifelse(Louelle_ESS$Wavevalue == 4, rowMeans(subset(Louelle_ESS, select = c(w4_q13_1, w4_q13_2, w4_q13_3, w4_q13_4)), na.rm = TRUE), NA))))
 
 Louelle_ESS$w1_q10_1 <- NULL
 Louelle_ESS$w1_q10_2 <- NULL
@@ -435,3 +435,9 @@ p <- p + geom_segment(aes(x = as.Date("2014-02-28", "%Y-%m-%d"), y=5.8, xend = a
 p <- p + theme(panel.grid.minor = element_blank())
 p
 ```
+
+With the graph above, the relationship between Dutch media coverage (both newspaper, TV and online) and pulitical cynicism amongst the public is shown. Both the amount of articles about elections and the (average) score on political cynicism (from 1 -totally disagree- to 7 -totally agree-) are plotted over time. 
+
+The graph shows that the amount of Dutch articles obout the 2014 EU Elections does not have a direct influence on political cynicism amongst the public. The average score on political cynicism stays somewhat fixed over time.
+
+When critically assessing the graph, some uncertainty problems arise. First of all, political cynicism has only been measured in the four-wave panel survey. Thus, between the four waves (represented in the graph by the grouped dots) political cynicism is not measured and therefore it cannot be concluded with full confidence that (the score on) political cynicism has not changed over time. Besides, the content and sentiment of the news articles about elections is not taken into account within this analysis and it remains unclear whether the survey-respondets were actually exposed to the media content about elections or not. These two factors might play an important (moderating) role in the influence of media coverage on political cynicism. In future research, these factors should be taken into account.
