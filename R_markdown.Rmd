@@ -315,6 +315,157 @@ PVV50 <- CA %>%
   
 ```
 
+##Katerin Kunfermann
+```{r, Katerin Kunfermann, echo = FALSE, message = FALSE, warning = FALSE}
+#export relevant variables into new tables KathrinCA & KathrinSurv
+KathrinCA <- ALL_FIXED %>% select(V6Topic, date, V4)
+KathrinSurv <- ESSclean %>% select(RESPNR, Wavevalue, date, w1_q11, w1_q12, w1_q13, w2_q8, w2_q9, w2_q10, w3_q12, w3_q13, w3_q14, w4_q14, w4_q15, w4_q16, w1_q49_1, w1_q49_2, w1_q50_1, w1_q50_2, w1_q50_6, w2_q44_1, w2_q44_2, w2_q45_1, w2_q45_2, w2_q45_6, w3_q43_1, w3_q43_2, w3_q44_1, w3_q44_2, w3_q44_6, w4_q47_1, w4_q47_2, w4_q48_1, w4_q48_2, w4_q48_6,w1_q51_2, w2_q46_2, w3_q45_2, w4_q49_2)
+
+#Clean KathrinSurv (seperate variable names and var values)
+KathrinSurv <- separate(KathrinSurv, w1_q49_1, into = c("W1Q491", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w1_q49_2, into = c("W1Q492", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w1_q50_1, into = c("W1Q501", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w1_q50_2, into = c("W1Q502", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w1_q50_6, into = c("W1Q506", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w1_q51_2, into = c("W1Q512", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w2_q44_1, into = c("W2Q441", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w2_q44_2, into = c("W2Q442", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w2_q45_1, into = c("W2Q451", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w2_q45_2, into = c("W2Q452", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w2_q45_6, into = c("W2Q456", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w2_q46_2, into = c("W2Q462", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w3_q43_1, into = c("W3Q431", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w3_q43_2, into = c("W3Q432", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w3_q44_1, into = c("W3Q441", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w3_q44_2, into = c("W3Q442", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w3_q44_6, into = c("W3Q446", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w3_q45_2, into = c("W3Q452", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w4_q47_1, into = c("W4Q471", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w4_q47_2, into = c("W4Q472", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w4_q48_1, into = c("W4Q481", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w4_q48_2, into = c("W4Q482", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w4_q48_6, into = c("W4Q486", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w4_q49_2, into = c("W4Q492", "varvalue"), sep = " ")
+
+#summ all the variables up by wave
+KathrinSurv$W1Q491 <- as.numeric(as.character(KathrinSurv$W1Q491))
+KathrinSurv$W1Q492 <- as.numeric(as.character(KathrinSurv$W1Q492))
+KathrinSurv$W1Q501 <- as.numeric(as.character(KathrinSurv$W1Q501))
+KathrinSurv$W1Q502 <- as.numeric(as.character(KathrinSurv$W1Q502))
+KathrinSurv$W1Q506 <- as.numeric(as.character(KathrinSurv$W1Q506))
+KathrinSurv$W1Q512 <- as.numeric(as.character(KathrinSurv$W1Q512))
+KathrinSurv$W2Q441 <- as.numeric(as.character(KathrinSurv$W2Q441))
+KathrinSurv$W2Q442 <- as.numeric(as.character(KathrinSurv$W2Q442))
+KathrinSurv$W2Q451 <- as.numeric(as.character(KathrinSurv$W2Q451))
+KathrinSurv$W2Q452 <- as.numeric(as.character(KathrinSurv$W2Q452))
+KathrinSurv$W2Q456 <- as.numeric(as.character(KathrinSurv$W2Q456))
+KathrinSurv$W2Q462 <- as.numeric(as.character(KathrinSurv$W2Q462))
+KathrinSurv$W3Q431 <- as.numeric(as.character(KathrinSurv$W3Q431))
+KathrinSurv$W3Q432 <- as.numeric(as.character(KathrinSurv$W3Q432))
+KathrinSurv$W3Q441 <- as.numeric(as.character(KathrinSurv$W3Q441))
+KathrinSurv$W3Q442 <- as.numeric(as.character(KathrinSurv$W3Q442))
+KathrinSurv$W3Q446 <- as.numeric(as.character(KathrinSurv$W3Q446))
+KathrinSurv$W3Q452 <- as.numeric(as.character(KathrinSurv$W3Q452))
+KathrinSurv$W4Q471 <- as.numeric(as.character(KathrinSurv$W4Q471))
+KathrinSurv$W4Q472 <- as.numeric(as.character(KathrinSurv$W4Q472))
+KathrinSurv$W4Q481 <- as.numeric(as.character(KathrinSurv$W4Q481))
+KathrinSurv$W4Q482 <- as.numeric(as.character(KathrinSurv$W4Q482))
+KathrinSurv$W4Q486 <- as.numeric(as.character(KathrinSurv$W4Q486))
+KathrinSurv$W4Q492 <- as.numeric(as.character(KathrinSurv$W4Q492))
+
+#calculate sums per wave and media usage
+KathrinSurv$sum <- ifelse(KathrinSurv$Wavevalue == 1, 
+                           rowSums(subset(KathrinSurv, select = c(W1Q491, W1Q492, W1Q501, W1Q502, W1Q506)), na.rm = TRUE), 
+                              ifelse(KathrinSurv$Wavevalue == 2, 
+                               rowSums(subset(KathrinSurv, select = c(W2Q441, W2Q442, W2Q451, W2Q452, W2Q452, W2Q462)), na.rm = TRUE), 
+                                  ifelse(KathrinSurv$Wavevalue == 3, 
+                                  rowSums(subset(KathrinSurv, select = c(W3Q431, W3Q432, W3Q441, W3Q442, W3Q452)), na.rm = TRUE), 
+                                      ifelse(KathrinSurv$Wavevalue == 4,
+                                       rowSums(subset(KathrinSurv, select = c(W4Q471, W4Q472, W4Q481, W4Q482, W4Q492)), na.rm = TRUE), 
+                                                NA))))
+
+#delete 0 value rows in media usage
+KathrinSurv <- KathrinSurv %>% filter(sum >= 1)
+
+#Clean KathrinSurv (seperate variable names and var values)
+KathrinSurv <- separate(KathrinSurv, w1_q11, into = c("W1Q11", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w1_q12, into = c("W1Q12", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w1_q13, into = c("W1Q13", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w2_q8, into = c("W2Q8", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w2_q9, into = c("W2Q9", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w2_q10, into = c("W2Q10", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w3_q12, into = c("W3Q12", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w3_q13, into = c("W3Q13", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w3_q14, into = c("W3Q14", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w4_q14, into = c("W4Q14", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w4_q15, into = c("W4Q15", "varvalue"), sep = " ")
+KathrinSurv <- separate(KathrinSurv, w4_q16, into = c("W4Q16", "varvalue"), sep = " ")
+
+#delete varvalue
+KathrinSurv$varvalue <- NULL
+
+#set as numeric
+KathrinSurv$W1Q11 <- as.numeric(as.character(KathrinSurv$W1Q11))
+KathrinSurv$W1Q12 <- as.numeric(as.character(KathrinSurv$W1Q12))
+KathrinSurv$W1Q13 <- as.numeric(as.character(KathrinSurv$W1Q13))
+KathrinSurv$W2Q8 <- as.numeric(as.character(KathrinSurv$W2Q8))
+KathrinSurv$W2Q9 <- as.numeric(as.character(KathrinSurv$W2Q9))
+KathrinSurv$W2Q10 <- as.numeric(as.character(KathrinSurv$W2Q10))
+KathrinSurv$W3Q12 <- as.numeric(as.character(KathrinSurv$W3Q12))
+KathrinSurv$W3Q13 <- as.numeric(as.character(KathrinSurv$W3Q13))
+KathrinSurv$W3Q14 <- as.numeric(as.character(KathrinSurv$W3Q14))
+KathrinSurv$W4Q14 <- as.numeric(as.character(KathrinSurv$W4Q14))
+KathrinSurv$W4Q15 <- as.numeric(as.character(KathrinSurv$W4Q15))
+KathrinSurv$W4Q16 <- as.numeric(as.character(KathrinSurv$W4Q16))
+
+#Calculate means per Wave
+KathrinSurv$mean <- ifelse(KathrinSurv$Wavevalue == 1, 
+                           rowMeans(subset(KathrinSurv, select = c(W1Q11, W1Q12, W1Q13)), na.rm = TRUE), 
+                              ifelse(KathrinSurv$Wavevalue == 2, 
+                               rowMeans(subset(KathrinSurv, select = c(W2Q8, W2Q9, W2Q10)), na.rm = TRUE), 
+                                  ifelse(KathrinSurv$Wavevalue == 3, 
+                                  rowMeans(subset(KathrinSurv, select = c(W3Q12, W3Q13, W3Q14)), na.rm = TRUE), 
+                                      ifelse(KathrinSurv$Wavevalue == 4,
+                                       rowMeans(subset(KathrinSurv, select = c(W4Q14, W4Q15, W4Q16)), na.rm = TRUE), 
+                                                NA))))
+
+#aggregate means per day
+KathrinSurv <- KathrinSurv %>% group_by(date) %>% summarise(mean(mean))
+
+#aggregate counts per day for economic in Content Analysis
+# Filter CA to articles in Dutch media (newspapers, TV and online)
+KathrinCA <- KathrinCA %>% 
+  filter(V6Topic == "Economy") %>%
+  filter(V4 %in% c("de Telegraaf", "de Volkskrant", "NOS Journaal", "NRC Handelsblad", "nu.nl", "RTL Nieuws")) %>% 
+  count(date)
+
+KathrinCA$n <- as.numeric(as.integer(KathrinCA$n))
+Kathrinvis <- merge(KathrinSurv, KathrinCA, by = c("date"), all = TRUE)
+rm(KathrinSurv)
+rm(KathrinCA)
+
+#rename columns
+names(Kathrinvis) <- c("date", "econprob", "articles")
+
+#create plot
+library(dygraphs)
+library(xts)
+
+require(dygraphs)
+require(xts)
+Kathrinvisxts <-xts(Kathrinvis[,-1], order.by = as.Date(Kathrinvis$date))
+
+dygraph(Kathrinvisxts, main = "The influence of media coverage on awareness of economic problems" ) %>%
+  dySeries("articles", label = "amount of articles (economy)", fillGraph = TRUE) %>%
+  dySeries("econprob", label = "awareness (economic problems)", fillGraph = TRUE) %>%
+  dyOptions(colors = RColorBrewer::brewer.pal(3, "Set1")) %>%
+  dyRangeSelector(height = 20) %>%
+  dyAxis("x", drawGrid = FALSE) %>%
+  dyLegend(width = 600)
+
+```
+The graph shows the relationship of media coverage (offline, online, and TV) in the Netherlands and the awareness of economic problems among the participants of the four waves of the survey over time. As shown, the amount of the media coverage does not have an influence on the awareness of economic problems.
+The absence of the first level agenda-setting effect (stating that the higher media coverage about a certain topic the higher the awareness among participants about a certain topic) can be explained by a possible influence of other variables that influence the relationship (such as e.g. length of article/TV Report). Additionally, the four-wave-structure of the survey restrict the ability to generalize statements since the gaps in-between the waves set boundaries to make generalized statements.
 
 ## Louelle Pesurnaij
 ```{r Louelle Pesurnaij, echo = FALSE, message = FALSE, warning = FALSE}
